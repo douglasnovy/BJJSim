@@ -15,7 +15,7 @@ Observation space (per agent)
 Action space (per agent)
 
 - Continuous vector per controllable joint
-- Control mode configurable: torque or position control
+- Default mode: torque control (position control optional later)
 - Clipped to [-1, 1], scaled inside physics adapter
 
 Termination

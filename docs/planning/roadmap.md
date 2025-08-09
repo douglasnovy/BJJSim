@@ -7,6 +7,7 @@ Phase 0 — Scaffolding (this PR)
 Phase 1 — Physics Prototype
 
 - Two humanoids in PyBullet; deterministic stepping; contact readout; GUI toggle
+- Select standard humanoid model and publish link/joint mapping
 - Exit: Deterministic stepping validated; contact summary extraction works
 
 Phase 2 — Environment and Rewards

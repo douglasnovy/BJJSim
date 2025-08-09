@@ -2,13 +2,13 @@
 
 1. Physics Simulation
    - Load two rigid humanoid URDFs with self-collision enabled
-   - Configure gravity, time step, and dynamics (initially zero friction)
+   - Configure gravity, time step, and dynamics (small non-zero lateral friction by default)
    - Provide per-step state access: joint positions/velocities, base pose, contacts
 
 2. Environment API (Multi-agent Gymnasium)
    - Two agents with symmetric observations/actions
    - Observation includes own + opponent kinematics and recent contact summary
-   - Action is continuous torque/position control per joint (configurable)
+   - Action is continuous torque control per joint by default (position control optional later)
    - Step/reset/close semantics compatible with RLlib
 
 3. Rewarding and Termination

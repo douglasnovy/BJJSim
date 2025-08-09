@@ -21,6 +21,7 @@ requirements/glossary
 :caption: Architecture
 
 architecture/architecture
+architecture/humanoid_model
 architecture/env_design
 architecture/observations_actions
 architecture/physics_design
@@ -37,4 +38,5 @@ planning/roadmap
 planning/milestones
 planning/risks
 planning/decisions/ADR-0001-initial-architecture
+planning/decisions/ADR-0002-foundational-choices
 ```

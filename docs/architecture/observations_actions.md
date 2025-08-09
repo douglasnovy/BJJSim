@@ -1,18 +1,24 @@
 # Observations and Actions
 
-Observations (per agent; tentative)
+Observations (per agent; initial)
 
 - Own joints: positions (radians), velocities (rad/s)
-- Opponent joints: positions, velocities
-- Base positions (z for top heuristic; consider full pose)
-- Contact summary: up to K contacts, each encoded as (link-pair id, normal force, relative position)
+- Opponent joints: positions, velocities (optionally downsampled)
+- Base: z-position for top heuristic; yaw may be added later if needed
+- Contact summary vector (computationally bounded):
+  - Fixed-size K entries (default K=8)
+  - Per-entry encoding: `(link_pair_id, normal_force, rel_pos_x, rel_pos_y, rel_pos_z)`
+  - Sorted by descending normal force; pad with zeros when fewer than K
+  - Optional exponential decay/EMA over last D steps (default D=3) for stability
 
 Actions (per agent)
 
-- Vector of length = number of controllable joints
-- Normalized to [-1, 1]; scaled to torque/target internally
+- Torque control by default
+- Vector length = number of controllable joints
+- Normalized to [-1, 1]; scaled to per-joint torque limits; clipped to safe bounds
 
 Notes
 
-- Keep shapes fixed; pad/truncate contacts to K
-- Provide dataclasses/TypedDicts for clarity in code
+- Keep tensor shapes fixed; pad/truncate contacts to K
+- Provide typed configuration for `K` and decay window `D`
+- Maintain mapping tables for link names to IDs for reproducible contact encoding

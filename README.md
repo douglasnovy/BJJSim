@@ -88,4 +88,4 @@ See `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md`.
 
 ## License
 
-TBD. Add a `LICENSE` file before first public release.
+PolyForm Noncommercial 1.0.0. See `LICENSE`.

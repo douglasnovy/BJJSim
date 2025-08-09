@@ -9,9 +9,10 @@ Environment
 
 Physics
 
-- friction_lateral: float (default: 0.0)
+- friction_lateral: float (default: 0.05)
 - friction_spinning: float (default: 0.0)
 - friction_rolling: float (default: 0.0)
+- torque_control: bool (default: true)
 - torque_scale: float (default: 200.0)
 - init_pose_jitter: float (default: 0.02)
 
@@ -36,6 +37,12 @@ Self-play / Training
 - lr: float (default: 3e-4)
 - entropy_coeff: float (default: 0.0)
 - seed: int
+
+Observation/Contacts
+
+- contact_K: int (default: 8)
+- contact_decay_window: int (default: 3)
+- include_opponent_yaw: bool (default: false)
 
 Notes
 

@@ -4,7 +4,7 @@ Goal: Build a Python-based multi-agent self-play simulation to explore emergent 
 
 Key components
 
-- Physics: PyBullet with rigid humanoids, fixed time step, initially zero friction
+- Physics: PyBullet with rigid humanoids, fixed time step, small non-zero lateral friction by default (configurable)
 - Environment: Custom multi-agent Gymnasium environment with typed observations/actions
 - Rewards: Hierarchical — staying on top > control > joint hyperextension > choke; energy penalty; terminate on submission
 - RL: Self-play using Ray RLlib (PPO, torch); GUI for debugging; headless training
