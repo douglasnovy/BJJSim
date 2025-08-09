@@ -1,178 +1,207 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "Setup: create .venv and dev tools",
-      "type": "shell",
-      "command": "pwsh",
-      "args": [
-        "-ExecutionPolicy",
-        "Bypass",
-        "-File",
-        "${workspaceFolder}\\scripts\\setup.ps1"
-      ],
-      "group": "build",
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared",
-        "clear": true
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Lint: ruff (check)",
-      "type": "process",
-      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
-      "args": ["-m", "ruff", "check", "."],
-      "group": "test",
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Format: black (write)",
-      "type": "process",
-      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
-      "args": ["-m", "black", "."],
-      "group": "none",
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Format Check: black --check",
-      "type": "process",
-      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
-      "args": ["-m", "black", "--check", "."],
-      "group": "test",
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Type-check: mypy",
-      "type": "process",
-      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
-      "args": ["-m", "mypy", "."],
-      "group": "test",
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Test: pytest",
-      "type": "process",
-      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
-      "args": ["-m", "pytest", "-q"],
-      "group": "test",
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Hooks: pre-commit (all files)",
-      "type": "process",
-      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
-      "args": ["-m", "pre_commit", "run", "--all-files"],
-      "group": "test",
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Docs: build (sphinx)",
-      "type": "shell",
-      "command": "pwsh",
-      "args": [
-        "-ExecutionPolicy",
-        "Bypass",
-        "-File",
-        "${workspaceFolder}\\scripts\\docs-build.ps1"
-      ],
-      "group": "build",
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Docs: serve (live)",
-      "type": "shell",
-      "command": "pwsh",
-      "args": [
-        "-ExecutionPolicy",
-        "Bypass",
-        "-File",
-        "${workspaceFolder}\\scripts\\docs-serve.ps1"
-      ],
-      "isBackground": true,
-      "group": "none",
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated"
-      },
-      "problemMatcher": [
+    "version": "2.0.0",
+    "tasks": [
         {
-          "owner": "sphinx-autobuild",
-          "fileLocation": "absolute",
-          "pattern": [
-            {
-              "regexp": "^(.*):(\\d+):(\\d+):\\s*(WARNING|ERROR):\\s*(.*)$",
-              "file": 1,
-              "line": 2,
-              "column": 3,
-              "severity": 4,
-              "message": 5
-            }
-          ],
-          "background": {
-            "activeOnStart": true,
-            "beginsPattern": ".*",
-            "endsPattern": ".*Serving on.*"
-          }
+            "label": "Setup: create .venv and dev tools",
+            "type": "shell",
+            "command": "pwsh",
+            "args": [
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                "${workspaceFolder}\\scripts\\setup.ps1"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Lint: ruff (check)",
+            "type": "process",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": [
+                "-m",
+                "ruff",
+                "check",
+                "."
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Format: black (write)",
+            "type": "process",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": [
+                "-m",
+                "black",
+                "."
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Format Check: black --check",
+            "type": "process",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": [
+                "-m",
+                "black",
+                "--check",
+                "."
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Type-check: mypy",
+            "type": "process",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": [
+                "-m",
+                "mypy",
+                "."
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Test: pytest",
+            "type": "process",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": [
+                "-m",
+                "pytest",
+                "-q"
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Hooks: pre-commit (all files)",
+            "type": "process",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": [
+                "-m",
+                "pre_commit",
+                "run",
+                "--all-files"
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Docs: build (sphinx)",
+            "type": "shell",
+            "command": "pwsh",
+            "args": [
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                "${workspaceFolder}\\scripts\\docs-build.ps1"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Docs: serve (live)",
+            "type": "shell",
+            "command": "pwsh",
+            "args": [
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                "${workspaceFolder}\\scripts\\docs-serve.ps1"
+            ],
+            "isBackground": true,
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": [
+                {
+                    "owner": "sphinx-autobuild",
+                    "fileLocation": "absolute",
+                    "pattern": [
+                        {
+                            "regexp": "^(.*):(\\d+):(\\d+):\\s*(WARNING|ERROR):\\s*(.*)$",
+                            "file": 1,
+                            "line": 2,
+                            "column": 3,
+                            "severity": 4,
+                            "message": 5
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".*",
+                        "endsPattern": ".*Serving on.*"
+                    }
+                }
+            ]
+        },
+        {
+            "label": "Docs: open index.html",
+            "type": "shell",
+            "command": "pwsh",
+            "args": [
+                "-Command",
+                "Start-Process '${workspaceFolder}\\docs\\_build\\html\\index.html'"
+            ],
+            "dependsOn": [
+                "Docs: build (sphinx)"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "never",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Verify: format+lint+types+tests",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Format Check: black --check",
+                "Lint: ruff (check)",
+                "Type-check: mypy",
+                "Test: pytest",
+                "Hooks: pre-commit (all files)"
+            ],
+            "problemMatcher": []
         }
-      ]
-    },
-    {
-      "label": "Docs: open index.html",
-      "type": "shell",
-      "command": "pwsh",
-      "args": [
-        "-Command",
-        "Start-Process '${workspaceFolder}\\docs\\_build\\html\\index.html'"
-      ],
-      "dependsOn": ["Docs: build (sphinx)"],
-      "group": "none",
-      "presentation": {
-        "reveal": "never",
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Verify: format+lint+types+tests",
-      "dependsOrder": "sequence",
-      "dependsOn": [
-        "Format Check: black --check",
-        "Lint: ruff (check)",
-        "Type-check: mypy",
-        "Test: pytest",
-        "Hooks: pre-commit (all files)"
-      ],
-      "problemMatcher": []
-    }
-  ]
+    ]
 }

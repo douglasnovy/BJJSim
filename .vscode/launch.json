@@ -1,46 +1,56 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Python: Current File (Integrated .venv)",
-      "type": "python",
-      "request": "launch",
-      "program": "${file}",
-      "console": "integratedTerminal",
-      "justMyCode": true,
-      "env": {
-        "PYTHONPATH": "${workspaceFolder}"
-      }
-    },
-    {
-      "name": "Pytest: Debug tests",
-      "type": "python",
-      "request": "launch",
-      "module": "pytest",
-      "args": ["-q"],
-      "justMyCode": true,
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}"
-    },
-    {
-      "name": "Docs: sphinx-build (debug)",
-      "type": "python",
-      "request": "launch",
-      "module": "sphinx",
-      "args": ["-b", "html", "docs", "docs/_build/html"],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}",
-      "justMyCode": true
-    },
-    {
-      "name": "Docs: sphinx-autobuild (debug)",
-      "type": "python",
-      "request": "launch",
-      "module": "sphinx_autobuild",
-      "args": ["docs", "docs/_build/html"],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}",
-      "justMyCode": true
-    }
-  ]
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File (Integrated .venv)",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "Pytest: Debug tests",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-q"
+            ],
+            "justMyCode": true,
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Docs: sphinx-build (debug)",
+            "type": "python",
+            "request": "launch",
+            "module": "sphinx",
+            "args": [
+                "-b",
+                "html",
+                "docs",
+                "docs/_build/html"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": true
+        },
+        {
+            "name": "Docs: sphinx-autobuild (debug)",
+            "type": "python",
+            "request": "launch",
+            "module": "sphinx_autobuild",
+            "args": [
+                "docs",
+                "docs/_build/html"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": true
+        }
+    ]
 }
