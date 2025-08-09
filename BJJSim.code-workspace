@@ -1,0 +1,142 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+        "python.venvPath": "${workspaceFolder}",
+        "python.terminal.activateEnvironment": true,
+        "python.analysis.typeCheckingMode": "strict",
+        "python.testing.pytestEnabled": true,
+        "python.testing.unittestEnabled": false,
+        "python.testing.pytestArgs": [
+            "tests"
+        ],
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file",
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+        },
+        "[python]": {
+            "editor.defaultFormatter": "charliermarsh.ruff",
+            "editor.codeActionsOnSave": {
+                "source.fixAll.ruff": "explicit",
+                "source.organizeImports.ruff": "explicit"
+            }
+        },
+        "ruff.enable": true,
+        "ruff.lint.run": "onSave",
+        "ruff.lint.args": [],
+        "ruff.format.enable": true,
+        "files.exclude": {
+            "**/__pycache__/": true,
+            "**/.pytest_cache/": true,
+            "**/.ruff_cache/": true,
+            "**/.mypy_cache/": true,
+            "**/.venv/": true,
+            "**/build/": true,
+            "**/dist/": true
+        },
+        "search.exclude": {
+            "**/__pycache__/": true,
+            "**/.pytest_cache/": true,
+            "**/.ruff_cache/": true,
+            "**/.mypy_cache/": true,
+            "**/.venv/": true,
+            "**/build/": true,
+            "**/dist/": true
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-python.python",
+            "ms-python.vscode-pylance",
+            "charliermarsh.ruff",
+            "ms-toolsai.jupyter",
+            "tamasfe.even-better-toml",
+            "DavidAnson.vscode-markdownlint",
+            "streetsidesoftware.code-spell-checker",
+            "github.vscode-pull-request-github"
+        ]
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "Ruff: Lint",
+                "type": "shell",
+                "command": "ruff",
+                "args": [
+                    "check",
+                    "."
+                ],
+                "group": "build"
+            },
+            {
+                "label": "Ruff: Fix",
+                "type": "shell",
+                "command": "ruff",
+                "args": [
+                    "check",
+                    "--fix",
+                    "."
+                ],
+                "group": "build"
+            },
+            {
+                "label": "Ruff: Format",
+                "type": "shell",
+                "command": "ruff",
+                "args": [
+                    "format",
+                    "."
+                ]
+            },
+            {
+                "label": "Pytest: All",
+                "type": "shell",
+                "command": "${config:python.defaultInterpreterPath}",
+                "args": [
+                    "-m",
+                    "pytest",
+                    "-q",
+                    "tests"
+                ],
+                "group": "test"
+            },
+            {
+                "label": "Type Check: pyright",
+                "type": "shell",
+                "command": "pyright"
+            }
+        ]
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Python: Current File",
+                "type": "python",
+                "request": "launch",
+                "program": "${file}",
+                "console": "integratedTerminal",
+                "justMyCode": true
+            },
+            {
+                "name": "Python: Debug pytest (current file)",
+                "type": "python",
+                "request": "launch",
+                "module": "pytest",
+                "args": [
+                    "-q",
+                    "${file}"
+                ],
+                "console": "integratedTerminal",
+                "justMyCode": true
+            }
+        ]
+    }
+}
