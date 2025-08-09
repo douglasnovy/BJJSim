@@ -1,28 +1,32 @@
 {
-  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
-  "python.terminal.activateEnvironment": true,
-  "python.analysis.typeCheckingMode": "strict",
-  "python.formatting.provider": "black",
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.organizeImports.ruff": true,
-    "source.fixAll.ruff": true
-  },
-  "ruff.lint.args": ["--line-length", "100"],
-  "black-formatter.args": ["--line-length", "100"],
-  "python.testing.pytestEnabled": true,
-  "python.testing.pytestArgs": ["tests"],
-  "python.testing.unittestEnabled": false,
-  "python.testing.nosetestsEnabled": false,
-  "files.exclude": {
-    "**/.venv": true,
-    "**/__pycache__": true,
-    "docs/_build": true
-  },
-  "terminal.integrated.defaultProfile.windows": "PowerShell",
-  "terminal.integrated.profiles.windows": {
-    "PowerShell": {
-      "path": "C:/Program Files/PowerShell/7/pwsh.exe"
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+    "python.terminal.activateEnvironment": true,
+    "python.analysis.typeCheckingMode": "strict",
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports.ruff": true,
+        "source.fixAll.ruff": true
+    },
+    "black-formatter.args": [
+        "--line-length",
+        "100"
+    ],
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "files.exclude": {
+        "**/.venv": true,
+        "**/__pycache__": true,
+        "docs/_build": true
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "path": "C:/Program Files/PowerShell/7/pwsh.exe"
+        }
     }
-  }
 }
