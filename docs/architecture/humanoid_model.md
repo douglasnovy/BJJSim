@@ -3,7 +3,7 @@
 Choice
 
 - Use the DeepMind Control Suite Humanoid MJCF (PyBullet-compatible port) checked into:
-  - `src/bjsim/assets/humanoids/dm_control_humanoid/humanoid.xml`
+  - `src/bjjsim/assets/humanoids/dm_control_humanoid/humanoid.xml`
 - The loader will accept a model registry key (e.g., `dm_control_humanoid`) to enable future swaps without code changes.
 
 Rationale

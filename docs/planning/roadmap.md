@@ -11,6 +11,8 @@ Phase 1 — UI-First Physics Prototype
 - Select standard humanoid model and publish link/joint mapping
 - Exit: Deterministic stepping validated; contact summary extraction works; UI smoke test passes headless
 
+Deliverable now: UI skeleton with typed endpoints and placeholder data to enable Playwright test scaffolding.
+
 Phase 2 — Environment and Rewards
 
 - Multi-agent Gymnasium env; observation/action spaces; hierarchical reward components with logging

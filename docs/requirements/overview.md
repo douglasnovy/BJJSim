@@ -9,6 +9,8 @@ Key components
 - Rewards: Hierarchical — staying on top > control > joint hyperextension > choke; energy penalty; terminate on submission
 - RL: Self-play using Ray RLlib (PPO, torch); GUI for debugging; headless training
 
+Near-term deliverable: minimal FastAPI UI skeleton with deterministic test hooks (reset/seed, placeholder state, events) to unblock e2e test scaffolding.
+
 Scope (initial)
 
 - Minimal prototype (two humanoids) that supports potential BJJ positions via general physics (no hard-coded moves)
