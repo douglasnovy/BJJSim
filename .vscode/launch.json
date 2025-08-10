@@ -71,7 +71,7 @@
         },
         {
             "name": "Web UI: Quick Serve (PowerShell)",
-            "type": "ms-vscode.powershell.PowerShellLauncher",
+            "type": "PowerShell",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "script": "${workspaceFolder}/scripts/serve-quick.ps1",
