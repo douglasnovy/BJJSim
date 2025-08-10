@@ -52,6 +52,7 @@ planning/decisions/ADR-0002-foundational-choices
 planning/decisions/ADR-0003-web-ui-and-testability
 planning/decisions/ADR-0004-ui-first-and-foundational-choices
 planning/decisions/ADR-0005-api-response-models
+planning/decisions/ADR-0006-physics-adapter-interface
 planning/lessons_learned
 planning/agent_handoff_notes
 ```

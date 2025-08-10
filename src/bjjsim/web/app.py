@@ -14,6 +14,8 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
 from starlette.websockets import WebSocket, WebSocketDisconnect
 
+from bjjsim.physics import DeterministicCounterAdapter, PhysicsAdapter
+
 
 class ResetRequest(BaseModel):
     seed: int | None = Field(default=None, ge=0)
@@ -110,6 +112,7 @@ def create_app() -> FastAPI:
 
     templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
     state = _ServerState()
+    physics: PhysicsAdapter = DeterministicCounterAdapter()
     config = AppConfig()
 
     def index(request: Request) -> HTMLResponse:
@@ -160,6 +163,7 @@ def create_app() -> FastAPI:
 
     def reset(req: ResetRequest) -> StateResponse:
         state.episode_running = False
+        physics.reset(req.seed)
         state.step = 0
         if req.seed is not None:
             state.last_seed = req.seed
@@ -175,6 +179,7 @@ def create_app() -> FastAPI:
         if req.seed is not None:
             state.last_seed = req.seed
         state.episode_running = True
+        physics.start(req.seed)
         state.step = 0
         state.episodes_started_count += 1
         state.last_step_monotonic = None
@@ -187,6 +192,7 @@ def create_app() -> FastAPI:
 
     def stop() -> StateResponse:
         state.episode_running = False
+        physics.stop()
         _log_event("stop", {"reason": 1.0})  # 1.0 means manual stop (placeholder)
         return _to_state_response()
 
@@ -200,13 +206,15 @@ def create_app() -> FastAPI:
     def do_step(req: StepRequest) -> StateResponse:
         if not state.episode_running:
             raise HTTPException(status_code=409, detail="episode not running")
-        # For now, a deterministic counter; physics integration will replace this.
-        state.step += req.num_steps
+        # For now, use deterministic adapter; physics integration will replace this.
+        physics.step(req.num_steps)
+        state.step = max(state.step, physics.step_count)
         state.total_steps_count += req.num_steps
         _update_steps_per_second(req.num_steps)
         if state.step >= config.max_steps_per_episode:
             # Auto-stop when reaching max steps per episode
             state.episode_running = False
+            physics.stop()
             _log_event("stop", {"reason": 2.0})  # 2.0 means auto stop at limit
         _log_event("step", {"num_steps": float(req.num_steps), "step": float(state.step)})
         return _to_state_response()
