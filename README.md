@@ -4,7 +4,7 @@ Brazilian Jiu-Jitsu multi-agent self-play simulation. This repository will host 
 
 Status: UI skeleton implemented with FastAPI; basic endpoints and unit tests passing. Placeholder PNG frame endpoint and WebSocket skeleton added. Documentation scaffolded and building clean.
 
-Current branch target: Phase 1 stepping scaffold — adds typed `POST /api/sim/step` to advance a deterministic counter while an episode is running, plus UI and tests.
+Current branch target: Phase 1 stepping scaffold — adds typed `POST /api/sim/step` to advance a deterministic counter while an episode is running, plus UI and tests. Also adds lightweight server metrics in `GET /api/sim/state`.
 
 ## What we're building
 
@@ -40,6 +40,7 @@ Once started, the app provides these initial endpoints:
 - `POST /api/sim/stop` — stop episode
 - `POST /api/sim/step` — advance by `{num_steps:int>=1}` while running
 - `GET /api/sim/state` — current state
+  - Includes `metrics`: `{ episodes_started, total_steps, steps_per_second }`
 - `GET /api/frames/current` — placeholder PNG frame (will show live frames in Phase 1)
 - `WS  /ws/events` — WebSocket skeleton for live telemetry
 - `GET /healthz` — health probe with version

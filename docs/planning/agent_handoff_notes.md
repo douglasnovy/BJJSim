@@ -5,8 +5,13 @@
 - Tests: Added readiness assertion; ensured step auto-stop covered.
 - Docs: Updated Web API; added ADR-0005 and lessons learned.
 
+Updates in this iteration
+
+- App version now comes from `bjjsim.__version__`; current version: `0.0.2`.
+- `GET /api/sim/state` includes a minimal `metrics` block: `{ episodes_started, total_steps, steps_per_second }` (EMA).
+
 Suggested next tasks
 
-- Add minimal `/api/metrics` with typed payload and small UI widget on `index.html`.
+- Promote metrics to a dedicated `/api/metrics` endpoint and render a small metrics widget on `index.html`.
 - Introduce a simple in-memory event log and expand WS to stream periodic state updates.
-- Start stubbing physics adapter interface with types.
+- Start stubbing a physics adapter interface with types and unit tests.
