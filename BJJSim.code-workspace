@@ -36,7 +36,6 @@
             "**/.pytest_cache/": true,
             "**/.ruff_cache/": true,
             "**/.mypy_cache/": true,
-            "**/.venv/": true,
             "**/build/": true,
             "**/dist/": true
         },
@@ -45,7 +44,6 @@
             "**/.pytest_cache/": true,
             "**/.ruff_cache/": true,
             "**/.mypy_cache/": true,
-            "**/.venv/": true,
             "**/build/": true,
             "**/dist/": true
         }

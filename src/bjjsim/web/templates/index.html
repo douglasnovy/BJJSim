@@ -1,73 +1,117 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>BJJSim UI</title>
     <style>
-      body { font-family: system-ui, sans-serif; margin: 2rem; }
-      .row { display: flex; gap: 1rem; align-items: center; }
-      .metrics { margin-top: 1rem; }
-      .btn { padding: 0.5rem 1rem; border: 1px solid #444; background: #f4f4f4; cursor: pointer; }
-      .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-      input[type="number"] { width: 8rem; }
+        body {
+            font-family: system-ui, sans-serif;
+            margin: 2rem;
+        }
+
+        .row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .metrics {
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #444;
+            background: #f4f4f4;
+            cursor: pointer;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        input[type="number"] {
+            width: 8rem;
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <h1>BJJSim</h1>
     <div class="row">
-      <label for="seed">Seed</label>
-      <input id="seed" name="seed" type="number" value="{{ last_seed or '' }}" data-testid="input-seed" />
-      <button class="btn" id="btn-reset" data-testid="btn-reset">Reset</button>
-      <button class="btn" id="btn-start" data-testid="btn-start">Start</button>
-      <button class="btn" id="btn-stop" data-testid="btn-stop" {% if not episode_running %}disabled{% endif %} data-testid="btn-stop">Stop</button>
-      <button class="btn" id="btn-step" data-testid="btn-step">Step +1</button>
+        <label for="seed">Seed</label>
+        <input id="seed" name="seed" type="number" value="{{ last_seed or '' }}" data-testid="input-seed" />
+        <button class="btn" id="btn-reset" data-testid="btn-reset">Reset</button>
+        <button class="btn" id="btn-start" data-testid="btn-start">Start</button>
+        <button class="btn" id="btn-stop" data-testid="btn-stop" {% if not episode_running %}disabled{% endif %}
+            data-testid="btn-stop">Stop</button>
+        <button class="btn" id="btn-step" data-testid="btn-step">Step +1</button>
     </div>
     <div class="metrics" aria-live="polite">
-      <div>Episode running: <span id="val-running">{{ 'yes' if episode_running else 'no' }}</span></div>
-      <div>Last seed: <span id="val-seed">{{ last_seed if last_seed is not none else '-' }}</span></div>
-      <div>Step: <span id="val-step">{{ step }}</span></div>
+        <div>Episode running: <span id="val-running">{{ 'yes' if episode_running else 'no' }}</span></div>
+        <div>Last seed: <span id="val-seed">{{ last_seed if last_seed is not none else '-' }}</span></div>
+        <div>Step: <span id="val-step">{{ step }}</span></div>
     </div>
     <div class="preview" style="margin-top:1rem;">
-      <div>Frame preview:</div>
-      <img id="img-frame" alt="frame" src="/api/frames/current" width="200" height="200" style="border:1px solid #ddd;" data-testid="img-frame" />
+        <div>Frame preview:</div>
+        <img id="img-frame" alt="frame" src="/api/frames/current" width="200" height="200"
+            style="border:1px solid #ddd;" data-testid="img-frame" />
     </div>
     <script>
-      async function post(path, body) {
-        const res = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-        if (res.status === 204) return null;
-        return await res.json();
-      }
-      function getSeed() {
-        const v = document.getElementById('seed').value;
-        if (v === '') return null; const n = Number(v); return Number.isNaN(n) ? null : Math.max(0, Math.floor(n));
-      }
-      function render(state) {
-        if (!state) return;
-        document.getElementById('val-running').textContent = state.episode_running ? 'yes' : 'no';
-        document.getElementById('val-seed').textContent = state.last_seed ?? '-';
-        document.getElementById('val-step').textContent = state.step;
-        document.getElementById('btn-stop').disabled = !state.episode_running;
-        document.getElementById('btn-step').disabled = !state.episode_running;
-      }
-      document.getElementById('btn-reset').addEventListener('click', async () => {
-        render(await post('/api/sim/reset', { seed: getSeed() }));
-      });
-      document.getElementById('btn-start').addEventListener('click', async () => {
-        render(await post('/api/sim/start', { seed: getSeed() }));
-      });
-      document.getElementById('btn-stop').addEventListener('click', async () => {
-        render(await post('/api/sim/stop', {}));
-      });
-      document.getElementById('btn-step').addEventListener('click', async () => {
-        render(await post('/api/sim/step', { num_steps: 1 }));
-      });
-      // Refresh the frame preview periodically (2 Hz)
-      setInterval(() => {
-        const img = document.getElementById('img-frame');
-        const url = '/api/frames/current?ts=' + Date.now();
-        img.src = url;
-      }, 500);
+        async function post(path, body) {
+            const res = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+            if (res.status === 204) return null;
+            return await res.json();
+        }
+        function getSeed() {
+            const v = document.getElementById('seed').value;
+            if (v === '') return null; const n = Number(v); return Number.isNaN(n) ? null : Math.max(0, Math.floor(n));
+        }
+        function render(state) {
+            if (!state) return;
+            document.getElementById('val-running').textContent = state.episode_running ? 'yes' : 'no';
+            document.getElementById('val-seed').textContent = state.last_seed ?? '-';
+            document.getElementById('val-step').textContent = state.step;
+            document.getElementById('btn-stop').disabled = !state.episode_running;
+            document.getElementById('btn-step').disabled = !state.episode_running;
+        }
+        document.getElementById('btn-reset').addEventListener('click', async () => {
+            render(await post('/api/sim/reset', { seed: getSeed() }));
+        });
+        document.getElementById('btn-start').addEventListener('click', async () => {
+            render(await post('/api/sim/start', { seed: getSeed() }));
+        });
+        document.getElementById('btn-stop').addEventListener('click', async () => {
+            render(await post('/api/sim/stop', {}));
+        });
+        document.getElementById('btn-step').addEventListener('click', async () => {
+            render(await post('/api/sim/step', { num_steps: 1 }));
+        });
+        // Fetch config then refresh the frame preview using configured Hz
+        async function startPreviewLoop() {
+            try {
+                const res = await fetch('/api/config');
+                const cfg = await res.json();
+                const intervalMs = Math.max(1, Math.floor(1000 / (cfg.preview_hz ?? 2)));
+                setInterval(() => {
+                    const img = document.getElementById('img-frame');
+                    const url = '/api/frames/current?ts=' + Date.now();
+                    img.src = url;
+                }, intervalMs);
+            } catch (e) {
+                // Fallback to 2 Hz if config is unavailable
+                setInterval(() => {
+                    const img = document.getElementById('img-frame');
+                    const url = '/api/frames/current?ts=' + Date.now();
+                    img.src = url;
+                }, 500);
+            }
+        }
+        startPreviewLoop();
     </script>
-  </body>
-  </html>
+</body>
+
+</html>

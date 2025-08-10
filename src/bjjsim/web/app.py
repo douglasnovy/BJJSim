@@ -7,8 +7,8 @@ from typing import Final
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
-from starlette.templating import Jinja2Templates
 from starlette.websockets import WebSocket
 
 
@@ -56,11 +56,27 @@ class _ServerState:
 TEMPLATES_DIR: Final[Path] = Path(__file__).parent / "templates"
 
 
+class AppConfig(BaseModel):
+    """Mutable runtime configuration exposed to the UI.
+
+    This is intentionally small and safe to change at runtime.
+    """
+
+    preview_hz: int = Field(default=2, ge=1, le=30, description="Frame preview frequency (Hz)")
+    max_steps_per_episode: int = Field(default=1000, ge=1, le=100_000)
+
+
+class AppConfigUpdate(BaseModel):
+    preview_hz: int | None = Field(default=None, ge=1, le=30)
+    max_steps_per_episode: int | None = Field(default=None, ge=1, le=100_000)
+
+
 def create_app() -> FastAPI:
     app = FastAPI(title="BJJSim UI", version="0.0.1")
 
     templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
     state = _ServerState()
+    config = AppConfig()
 
     def index(request: Request) -> HTMLResponse:
         return templates.TemplateResponse(
@@ -101,6 +117,9 @@ def create_app() -> FastAPI:
             raise HTTPException(status_code=409, detail="episode not running")
         # For now, a deterministic counter; physics integration will replace this.
         state.step += req.num_steps
+        if state.step >= config.max_steps_per_episode:
+            # Auto-stop when reaching max steps per episode
+            state.episode_running = False
         return JSONResponse(StateResponse.model_validate(state.__dict__).model_dump())
 
     # Placeholder frame endpoint: returns 204 for now.
@@ -143,6 +162,27 @@ def create_app() -> FastAPI:
         is_ready = TEMPLATES_DIR.exists()
         return JSONResponse(ReadinessResponse(ready=is_ready).model_dump())
 
+    # Config API
+    def get_config() -> JSONResponse:
+        return JSONResponse(config.model_dump())
+
+    def update_config(req: AppConfigUpdate) -> JSONResponse:
+        if req.preview_hz is not None:
+            config.preview_hz = req.preview_hz
+        if req.max_steps_per_episode is not None:
+            config.max_steps_per_episode = req.max_steps_per_episode
+        return JSONResponse(config.model_dump())
+
+    # Config page
+    def config_page(request: Request) -> HTMLResponse:
+        return templates.TemplateResponse(
+            "config.html",
+            {
+                "request": request,
+                "config": config.model_dump(),
+            },
+        )
+
     # Mount static if needed later
     app.mount("/static", StaticFiles(directory=str(TEMPLATES_DIR)), name="static")
 
@@ -157,5 +197,8 @@ def create_app() -> FastAPI:
     app.add_api_websocket_route("/ws/events", ws_events)
     app.add_api_route("/healthz", healthz, methods=["GET"])
     app.add_api_route("/readyz", readyz, methods=["GET"])
+    app.add_api_route("/api/config", get_config, methods=["GET"])
+    app.add_api_route("/api/config", update_config, methods=["POST"])
+    app.add_api_route("/config", config_page, methods=["GET"], response_class=HTMLResponse)
 
     return app

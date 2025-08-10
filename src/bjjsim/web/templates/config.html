@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BJJSim Config</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 2rem; }
+      .row { display: flex; gap: 1rem; align-items: center; margin-bottom: 0.5rem; }
+      .btn { padding: 0.5rem 1rem; border: 1px solid #444; background: #f4f4f4; cursor: pointer; }
+      input[type="number"] { width: 8rem; }
+      .msg { margin-top: 0.5rem; color: #060; }
+    </style>
+  </head>
+  <body>
+    <h1>Config</h1>
+    <div class="row">
+      <label for="preview_hz">Preview Hz</label>
+      <input id="preview_hz" type="number" min="1" max="30" value="{{ config.preview_hz }}" data-testid="input-preview-hz" />
+    </div>
+    <div class="row">
+      <label for="max_steps">Max steps per episode</label>
+      <input id="max_steps" type="number" min="1" max="100000" value="{{ config.max_steps_per_episode }}" data-testid="input-max-steps" />
+    </div>
+    <div class="row">
+      <button class="btn" id="btn-save" data-testid="btn-config-save">Save</button>
+      <a class="btn" href="/" data-testid="btn-back">Back</a>
+    </div>
+    <div class="msg" id="msg"></div>
+    <script>
+      document.getElementById('btn-save').addEventListener('click', async () => {
+        const body = {
+          preview_hz: Number(document.getElementById('preview_hz').value),
+          max_steps_per_episode: Number(document.getElementById('max_steps').value)
+        };
+        const res = await fetch('/api/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        if (res.ok) {
+          document.getElementById('msg').textContent = 'Saved';
+        } else {
+          document.getElementById('msg').textContent = 'Failed';
+        }
+      });
+    </script>
+  </body>
+  </html>
