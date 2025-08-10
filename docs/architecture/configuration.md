@@ -1,4 +1,4 @@
-# Configuration Knobs
+# Configuration Knobs and Strategy
 
 Environment
 
@@ -54,4 +54,4 @@ Observation/Contacts
 
 Notes
 
-- Capture these in a typed config (e.g., Pydantic model) when implementation begins.
+- Implementation will use Pydantic v2 typed models as the source of truth, with layered overrides (defaults → YAML → env vars). Effective config for each run will be frozen to `runs/<run>/config.yaml`.

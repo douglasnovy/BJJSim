@@ -1,4 +1,4 @@
-# Web UI Architecture
+# Web UI Architecture (Phase 1 Priority)
 
 ## Goals
 
@@ -21,6 +21,12 @@
 - `WS   /ws/events` → stream of telemetry/events (reward components, contact counts, termination reasons).
 
 All request/response bodies must be defined as typed models and versioned.
+
+## Phase 1 Implementation Notes
+
+- UI-first: wire the UI to the physics adapter with simple scripted motions before RL is integrated.
+- Determinism hooks: explicit `{seed:int}` and `reset` ensure reproducible e2e tests.
+- Frame cadence: 2–5 Hz preview to bound CPU; on-demand still image endpoint for tests.
 
 ## Pages (initial)
 

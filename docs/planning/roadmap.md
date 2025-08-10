@@ -4,11 +4,12 @@ Phase 0 — Scaffolding (this PR)
 
 - Repo structure, docs, tooling (ruff/black/mypy/pre-commit)
 
-Phase 1 — Physics Prototype
+Phase 1 — UI-First Physics Prototype
 
 - Two humanoids in PyBullet; deterministic stepping; contact readout; GUI toggle
+- Local web UI (FastAPI + Jinja2) with start/stop/reset/seed; periodic frame preview with overlays
 - Select standard humanoid model and publish link/joint mapping
-- Exit: Deterministic stepping validated; contact summary extraction works
+- Exit: Deterministic stepping validated; contact summary extraction works; UI smoke test passes headless
 
 Phase 2 — Environment and Rewards
 
