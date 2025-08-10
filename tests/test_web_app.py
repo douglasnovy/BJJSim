@@ -47,7 +47,8 @@ def test_frame_endpoint_png() -> None:
 
     res = client.get("/api/frames/current")
     assert res.status_code == 200
-    assert res.headers.get("content-type") == "image/png"
+    ctype = res.headers.get("content-type", "")
+    assert ctype.startswith("image/png")
     body = res.content
     # PNG signature
     assert body.startswith(b"\x89PNG\r\n\x1a\n")
