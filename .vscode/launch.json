@@ -51,6 +51,32 @@
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "justMyCode": true
+        },
+        {
+            "name": "Web UI: Uvicorn (FastAPI)",
+            "type": "python",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "bjjsim.web.app:create_app",
+                "--factory",
+                "--host",
+                "127.0.0.1",
+                "--port",
+                "8000"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": true
+        },
+        {
+            "name": "Web UI: Quick Serve (PowerShell)",
+            "type": "ms-vscode.powershell.PowerShellLauncher",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "script": "${workspaceFolder}/scripts/serve-quick.ps1",
+            "args": [],
+            "createTemporaryIntegratedConsole": true
         }
     ]
 }
