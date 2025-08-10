@@ -134,3 +134,14 @@ def test_config_get_and_update() -> None:
     state2: dict[str, Any] = res.json()
     assert state2["step"] >= 3
     assert state2["episode_running"] is False
+
+
+def test_readyz_true_when_templates_exist() -> None:
+    app = create_app()
+    client = TestClient(app)
+
+    res = client.get("/readyz")
+    assert res.status_code == 200
+    payload: dict[str, Any] = res.json()
+    # Should be true because templates dir exists in repo
+    assert payload["ready"] is True

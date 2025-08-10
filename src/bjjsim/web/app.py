@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Final
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse, Response
+from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
@@ -89,30 +89,30 @@ def create_app() -> FastAPI:
             },
         )
 
-    def reset(req: ResetRequest) -> JSONResponse:
+    def reset(req: ResetRequest) -> StateResponse:
         state.episode_running = False
         state.step = 0
         if req.seed is not None:
             state.last_seed = req.seed
-        return JSONResponse(StateResponse.model_validate(state.__dict__).model_dump())
+        return StateResponse.model_validate(state.__dict__)
 
-    def start(req: StartRequest) -> JSONResponse:
+    def start(req: StartRequest) -> StateResponse:
         if state.episode_running:
             raise HTTPException(status_code=409, detail="episode already running")
         if req.seed is not None:
             state.last_seed = req.seed
         state.episode_running = True
         state.step = 0
-        return JSONResponse(StateResponse.model_validate(state.__dict__).model_dump())
+        return StateResponse.model_validate(state.__dict__)
 
-    def stop() -> JSONResponse:
+    def stop() -> StateResponse:
         state.episode_running = False
-        return JSONResponse(StateResponse.model_validate(state.__dict__).model_dump())
+        return StateResponse.model_validate(state.__dict__)
 
-    def get_state() -> JSONResponse:
-        return JSONResponse(StateResponse.model_validate(state.__dict__).model_dump())
+    def get_state() -> StateResponse:
+        return StateResponse.model_validate(state.__dict__)
 
-    def do_step(req: StepRequest) -> JSONResponse:
+    def do_step(req: StepRequest) -> StateResponse:
         if not state.episode_running:
             raise HTTPException(status_code=409, detail="episode not running")
         # For now, a deterministic counter; physics integration will replace this.
@@ -120,7 +120,7 @@ def create_app() -> FastAPI:
         if state.step >= config.max_steps_per_episode:
             # Auto-stop when reaching max steps per episode
             state.episode_running = False
-        return JSONResponse(StateResponse.model_validate(state.__dict__).model_dump())
+        return StateResponse.model_validate(state.__dict__)
 
     # Placeholder frame endpoint: returns 204 for now.
     def get_frame() -> Response:
@@ -150,28 +150,27 @@ def create_app() -> FastAPI:
         )
         await ws.close()
 
-    def healthz() -> JSONResponse:
+    def healthz() -> HealthResponse:
         # Import locally to avoid any possibility of import cycles during app startup.
         from bjjsim import __version__ as pkg_version
 
-        payload = HealthResponse(status="ok", version=pkg_version).model_dump()
-        return JSONResponse(payload)
+        return HealthResponse(status="ok", version=pkg_version)
 
-    def readyz() -> JSONResponse:
+    def readyz() -> ReadinessResponse:
         # Basic readiness: templates directory exists and is accessible.
         is_ready = TEMPLATES_DIR.exists()
-        return JSONResponse(ReadinessResponse(ready=is_ready).model_dump())
+        return ReadinessResponse(ready=is_ready)
 
     # Config API
-    def get_config() -> JSONResponse:
-        return JSONResponse(config.model_dump())
+    def get_config() -> AppConfig:
+        return config
 
-    def update_config(req: AppConfigUpdate) -> JSONResponse:
+    def update_config(req: AppConfigUpdate) -> AppConfig:
         if req.preview_hz is not None:
             config.preview_hz = req.preview_hz
         if req.max_steps_per_episode is not None:
             config.max_steps_per_episode = req.max_steps_per_episode
-        return JSONResponse(config.model_dump())
+        return config
 
     # Config page
     def config_page(request: Request) -> HTMLResponse:
@@ -188,17 +187,17 @@ def create_app() -> FastAPI:
 
     # Register routes explicitly to keep mypy happy with decorators
     app.add_api_route("/", index, methods=["GET"], response_class=HTMLResponse)
-    app.add_api_route("/api/sim/reset", reset, methods=["POST"])
-    app.add_api_route("/api/sim/start", start, methods=["POST"])
-    app.add_api_route("/api/sim/stop", stop, methods=["POST"])
-    app.add_api_route("/api/sim/step", do_step, methods=["POST"])
-    app.add_api_route("/api/sim/state", get_state, methods=["GET"])
+    app.add_api_route("/api/sim/reset", reset, methods=["POST"], response_model=StateResponse)
+    app.add_api_route("/api/sim/start", start, methods=["POST"], response_model=StateResponse)
+    app.add_api_route("/api/sim/stop", stop, methods=["POST"], response_model=StateResponse)
+    app.add_api_route("/api/sim/step", do_step, methods=["POST"], response_model=StateResponse)
+    app.add_api_route("/api/sim/state", get_state, methods=["GET"], response_model=StateResponse)
     app.add_api_route("/api/frames/current", get_frame, methods=["GET"], response_class=Response)
     app.add_api_websocket_route("/ws/events", ws_events)
-    app.add_api_route("/healthz", healthz, methods=["GET"])
-    app.add_api_route("/readyz", readyz, methods=["GET"])
-    app.add_api_route("/api/config", get_config, methods=["GET"])
-    app.add_api_route("/api/config", update_config, methods=["POST"])
+    app.add_api_route("/healthz", healthz, methods=["GET"], response_model=HealthResponse)
+    app.add_api_route("/readyz", readyz, methods=["GET"], response_model=ReadinessResponse)
+    app.add_api_route("/api/config", get_config, methods=["GET"], response_model=AppConfig)
+    app.add_api_route("/api/config", update_config, methods=["POST"], response_model=AppConfig)
     app.add_api_route("/config", config_page, methods=["GET"], response_class=HTMLResponse)
 
     return app
