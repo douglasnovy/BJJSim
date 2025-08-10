@@ -9,7 +9,12 @@ POST /api/sim/reset   { seed?: int>=0 }
 POST /api/sim/start   { seed?: int>=0 }
 POST /api/sim/stop    {}
 POST /api/sim/step    { num_steps: int>=1 } ; auto-stops when >= max_steps_per_episode
-GET  /api/sim/state   -> JSON state
+GET  /api/sim/state   -> {
+  episode_running: bool,
+  last_seed: int|null,
+  step: int,
+  metrics: { episodes_started: float, total_steps: float, steps_per_second: float }
+}
 GET  /api/frames/current -> image/png
 WS   /ws/events       -> single hello message then close
 GET  /healthz         -> { status: "ok", version: string }

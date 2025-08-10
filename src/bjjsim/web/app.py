@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from time import monotonic
 from typing import Final
 
 from fastapi import FastAPI, HTTPException, Request
@@ -51,6 +52,11 @@ class _ServerState:
     episode_running: bool = False
     last_seed: int | None = None
     step: int = 0
+    # Metrics tracking (internal counters/time). Exposed via StateResponse.metrics
+    total_steps_count: int = 0
+    episodes_started_count: int = 0
+    last_step_monotonic: float | None = None
+    steps_ema_sps: float = 0.0
 
 
 TEMPLATES_DIR: Final[Path] = Path(__file__).parent / "templates"
@@ -72,7 +78,10 @@ class AppConfigUpdate(BaseModel):
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="BJJSim UI", version="0.0.1")
+    # Import locally to avoid any possibility of import cycles during app startup.
+    from bjjsim import __version__ as pkg_version
+
+    app = FastAPI(title="BJJSim UI", version=pkg_version)
 
     templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
     state = _ServerState()
@@ -89,12 +98,46 @@ def create_app() -> FastAPI:
             },
         )
 
+    def _build_metrics() -> dict[str, float]:
+        return {
+            "episodes_started": float(state.episodes_started_count),
+            "total_steps": float(state.total_steps_count),
+            "steps_per_second": float(state.steps_ema_sps),
+        }
+
+    def _to_state_response() -> StateResponse:
+        return StateResponse(
+            episode_running=state.episode_running,
+            last_seed=state.last_seed,
+            step=state.step,
+            metrics=_build_metrics(),
+        )
+
+    def _update_steps_per_second(num_steps: int) -> None:
+        now = monotonic()
+        if state.last_step_monotonic is None:
+            state.last_step_monotonic = now
+            return
+        dt = now - state.last_step_monotonic
+        # Guard against zero/negative time deltas due to clock peculiarities.
+        if dt <= 1e-9:
+            state.last_step_monotonic = now
+            return
+        instantaneous_sps = float(num_steps) / dt
+        # Exponential moving average for stability
+        alpha = 0.5
+        state.steps_ema_sps = (1 - alpha) * state.steps_ema_sps + alpha * instantaneous_sps
+        state.last_step_monotonic = now
+
     def reset(req: ResetRequest) -> StateResponse:
         state.episode_running = False
         state.step = 0
         if req.seed is not None:
             state.last_seed = req.seed
-        return StateResponse.model_validate(state.__dict__)
+        # Reset per-episode timing; leave global counters intact
+        state.last_step_monotonic = None
+        state.steps_ema_sps = 0.0
+        return _to_state_response()
 
     def start(req: StartRequest) -> StateResponse:
         if state.episode_running:
@@ -103,24 +146,29 @@ def create_app() -> FastAPI:
             state.last_seed = req.seed
         state.episode_running = True
         state.step = 0
-        return StateResponse.model_validate(state.__dict__)
+        state.episodes_started_count += 1
+        state.last_step_monotonic = None
+        state.steps_ema_sps = 0.0
+        return _to_state_response()
 
     def stop() -> StateResponse:
         state.episode_running = False
-        return StateResponse.model_validate(state.__dict__)
+        return _to_state_response()
 
     def get_state() -> StateResponse:
-        return StateResponse.model_validate(state.__dict__)
+        return _to_state_response()
 
     def do_step(req: StepRequest) -> StateResponse:
         if not state.episode_running:
             raise HTTPException(status_code=409, detail="episode not running")
         # For now, a deterministic counter; physics integration will replace this.
         state.step += req.num_steps
+        state.total_steps_count += req.num_steps
+        _update_steps_per_second(req.num_steps)
         if state.step >= config.max_steps_per_episode:
             # Auto-stop when reaching max steps per episode
             state.episode_running = False
-        return StateResponse.model_validate(state.__dict__)
+        return _to_state_response()
 
     # Placeholder frame endpoint: returns 204 for now.
     def get_frame() -> Response:

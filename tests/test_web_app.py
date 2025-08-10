@@ -17,6 +17,7 @@ def test_reset_and_state_roundtrip() -> None:
     state: dict[str, Any] = res.json()
     assert state["episode_running"] is False
     assert state["step"] == 0
+    assert isinstance(state.get("metrics"), dict)
 
     # Reset with seed
     res = client.post("/api/sim/reset", json={"seed": 123})
@@ -78,6 +79,7 @@ def test_step_endpoint_advances_when_running() -> None:
     state: dict[str, Any] = res.json()
     assert state["episode_running"] is True
     assert state["step"] == 5
+    assert isinstance(state.get("metrics", {}).get("total_steps"), int | float)
 
     # Another step
     res = client.post("/api/sim/step", json={"num_steps": 2})
