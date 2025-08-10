@@ -138,6 +138,26 @@ def test_config_get_and_update() -> None:
     assert state2["episode_running"] is False
 
 
+def test_metrics_endpoint() -> None:
+    app = create_app()
+    client = TestClient(app)
+
+    # Initial metrics
+    res = client.get("/api/metrics")
+    assert res.status_code == 200
+    m: dict[str, Any] = res.json()
+    assert set(m.keys()) == {"episodes_started", "total_steps", "steps_per_second"}
+    e0 = m["episodes_started"]
+    t0 = m["total_steps"]
+
+    # Start and step should change metrics
+    assert client.post("/api/sim/start", json={}).status_code == 200
+    assert client.post("/api/sim/step", json={"num_steps": 2}).status_code == 200
+    m2: dict[str, Any] = client.get("/api/metrics").json()
+    assert m2["episodes_started"] >= e0
+    assert m2["total_steps"] >= t0
+
+
 def test_readyz_true_when_templates_exist() -> None:
     app = create_app()
     client = TestClient(app)

@@ -47,6 +47,12 @@ class ReadinessResponse(BaseModel):
     ready: bool
 
 
+class MetricsResponse(BaseModel):
+    episodes_started: float
+    total_steps: float
+    steps_per_second: float
+
+
 @dataclass
 class _ServerState:
     episode_running: bool = False
@@ -158,6 +164,10 @@ def create_app() -> FastAPI:
     def get_state() -> StateResponse:
         return _to_state_response()
 
+    def get_metrics() -> MetricsResponse:
+        m = _build_metrics()
+        return MetricsResponse(**m)
+
     def do_step(req: StepRequest) -> StateResponse:
         if not state.episode_running:
             raise HTTPException(status_code=409, detail="episode not running")
@@ -240,6 +250,7 @@ def create_app() -> FastAPI:
     app.add_api_route("/api/sim/stop", stop, methods=["POST"], response_model=StateResponse)
     app.add_api_route("/api/sim/step", do_step, methods=["POST"], response_model=StateResponse)
     app.add_api_route("/api/sim/state", get_state, methods=["GET"], response_model=StateResponse)
+    app.add_api_route("/api/metrics", get_metrics, methods=["GET"], response_model=MetricsResponse)
     app.add_api_route("/api/frames/current", get_frame, methods=["GET"], response_class=Response)
     app.add_api_websocket_route("/ws/events", ws_events)
     app.add_api_route("/healthz", healthz, methods=["GET"], response_model=HealthResponse)

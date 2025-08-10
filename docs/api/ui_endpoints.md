@@ -15,6 +15,7 @@ GET  /api/sim/state   -> {
   step: int,
   metrics: { episodes_started: float, total_steps: float, steps_per_second: float }
 }
+GET  /api/metrics     -> { episodes_started: float, total_steps: float, steps_per_second: float }
 GET  /api/frames/current -> image/png
 WS   /ws/events       -> single hello message then close
 GET  /healthz         -> { status: "ok", version: string }
