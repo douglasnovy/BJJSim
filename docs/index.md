@@ -59,3 +59,10 @@ planning/decisions/ADR-0004-ui-first-and-foundational-choices
 
 architecture/ui_architecture
 ```
+
+```{toctree}
+:maxdepth: 1
+:caption: Web API
+
+api/ui_endpoints
+```

@@ -20,6 +20,16 @@ class StartRequest(BaseModel):
     seed: int | None = Field(default=None, ge=0)
 
 
+class StepRequest(BaseModel):
+    """Request body for stepping the simulation.
+
+    Allows stepping a positive number of ticks in one call to support
+    deterministic, controllable progression during prototyping.
+    """
+
+    num_steps: int = Field(default=1, ge=1, le=1000)
+
+
 class StateResponse(BaseModel):
     episode_running: bool = False
     last_seed: int | None = None
@@ -77,6 +87,13 @@ def create_app() -> FastAPI:
     def get_state() -> JSONResponse:
         return JSONResponse(StateResponse.model_validate(state.__dict__).model_dump())
 
+    def do_step(req: StepRequest) -> JSONResponse:
+        if not state.episode_running:
+            raise HTTPException(status_code=409, detail="episode not running")
+        # For now, a deterministic counter; physics integration will replace this.
+        state.step += req.num_steps
+        return JSONResponse(StateResponse.model_validate(state.__dict__).model_dump())
+
     # Placeholder frame endpoint: returns 204 for now.
     def get_frame() -> Response:
         """
@@ -113,6 +130,7 @@ def create_app() -> FastAPI:
     app.add_api_route("/api/sim/reset", reset, methods=["POST"])
     app.add_api_route("/api/sim/start", start, methods=["POST"])
     app.add_api_route("/api/sim/stop", stop, methods=["POST"])
+    app.add_api_route("/api/sim/step", do_step, methods=["POST"])
     app.add_api_route("/api/sim/state", get_state, methods=["GET"])
     app.add_api_route("/api/frames/current", get_frame, methods=["GET"], response_class=Response)
     app.add_api_websocket_route("/ws/events", ws_events)

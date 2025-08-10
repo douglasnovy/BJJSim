@@ -4,6 +4,8 @@ Brazilian Jiu-Jitsu multi-agent self-play simulation. This repository will host 
 
 Status: UI skeleton implemented with FastAPI; basic endpoints and unit tests passing. Placeholder PNG frame endpoint and WebSocket skeleton added. Documentation scaffolded and building clean.
 
+Current branch target: Phase 1 stepping scaffold — adds typed `POST /api/sim/step` to advance a deterministic counter while an episode is running, plus UI and tests.
+
 ## What we're building
 
 - Two rigid humanoids in PyBullet interact under simplified physics
@@ -36,6 +38,7 @@ Once started, the app provides these initial endpoints:
 - `POST /api/sim/reset` — reset with optional `{seed:int}`
 - `POST /api/sim/start` — start episode
 - `POST /api/sim/stop` — stop episode
+- `POST /api/sim/step` — advance by `{num_steps:int>=1}` while running
 - `GET /api/sim/state` — current state
 - `GET /api/frames/current` — placeholder PNG frame (will show live frames in Phase 1)
 - `WS  /ws/events` — WebSocket skeleton for live telemetry
