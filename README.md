@@ -44,6 +44,8 @@ Once started, the app provides these initial endpoints:
 - `WS  /ws/events` — WebSocket skeleton for live telemetry
 - `GET /healthz` — health probe with version
 - `GET /readyz` — readiness probe
+- `GET /api/config` — fetch runtime config
+- `POST /api/config` — update runtime config fields
 
 ### Troubleshooting
 
