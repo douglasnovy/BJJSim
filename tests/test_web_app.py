@@ -52,15 +52,20 @@ def test_frame_endpoint_png() -> None:
     assert body.startswith(b"\x89PNG\r\n\x1a\n")
 
 
-def test_ws_events_skeleton() -> None:
+def test_ws_events_streaming() -> None:
     app = create_app()
     client = TestClient(app)
 
     with client.websocket_connect("/ws/events") as ws:
+        # First message is hello
         data = ws.receive_json()
         assert data.get("type") == "hello"
         assert "episode_running" in data
         assert "step" in data
+        # Next message should be a state update
+        data2 = ws.receive_json()
+        assert data2.get("type") == "state"
+        assert "metrics" in data2
 
 
 def test_step_endpoint_advances_when_running() -> None:
@@ -167,3 +172,23 @@ def test_readyz_true_when_templates_exist() -> None:
     payload: dict[str, Any] = res.json()
     # Should be true because templates dir exists in repo
     assert payload["ready"] is True
+
+
+def test_events_endpoint_basic() -> None:
+    app = create_app()
+    client = TestClient(app)
+
+    # Perform a sequence of actions that emit events
+    assert client.post("/api/sim/reset", json={"seed": 42}).status_code == 200
+    assert client.post("/api/sim/start", json={}).status_code == 200
+    assert client.post("/api/sim/step", json={"num_steps": 3}).status_code == 200
+    # Query events
+    res = client.get("/api/events")
+    assert res.status_code == 200
+    body: dict[str, Any] = res.json()
+    assert isinstance(body.get("events"), list)
+    types = [e.get("type") for e in body["events"]]
+    # Ensure recent actions are present
+    assert any(t == "reset" for t in types)
+    assert any(t == "start" for t in types)
+    assert any(t == "step" for t in types)

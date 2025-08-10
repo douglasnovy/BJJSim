@@ -43,11 +43,12 @@ Once started, the app provides these initial endpoints:
   - Includes `metrics`: `{ episodes_started, total_steps, steps_per_second }`
 - `GET /api/frames/current` — placeholder PNG frame (will show live frames in Phase 1)
 - `GET /api/metrics` — lightweight server metrics
-- `WS  /ws/events` — WebSocket skeleton for live telemetry
+- `WS  /ws/events` — WebSocket stream: initial `hello` then periodic `state` updates
 - `GET /healthz` — health probe with version
 - `GET /readyz` — readiness probe
 - `GET /api/config` — fetch runtime config
 - `POST /api/config` — update runtime config fields
+- `GET /api/events` — recent in-memory server events (for debugging/UI)
 
 ### Troubleshooting
 

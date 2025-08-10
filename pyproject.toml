@@ -1,6 +1,6 @@
 [project]
 name = "bjjsim"
-version = "0.0.1"
+version = "0.0.3"
 description = "Brazilian Jiu-Jitsu multi-agent self-play simulation (UI skeleton)"
 readme = "README.md"
 requires-python = ">=3.12"
