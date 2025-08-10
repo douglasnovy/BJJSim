@@ -22,4 +22,7 @@ pip install ruff black mypy pytest pre-commit
 Write-Host "Installing pre-commit hooks" -ForegroundColor Cyan
 pre-commit install
 
+Write-Host "Installing project package and dependencies (-e .)" -ForegroundColor Cyan
+pip install -e .
+
 Write-Host "Done. To activate later: .\\.venv\\Scripts\\Activate.ps1" -ForegroundColor Green

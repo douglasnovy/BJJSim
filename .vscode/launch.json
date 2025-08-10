@@ -3,7 +3,7 @@
     "configurations": [
         {
             "name": "Python: Current File (Integrated .venv)",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
@@ -14,7 +14,7 @@
         },
         {
             "name": "Pytest: Debug tests",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "pytest",
             "args": [
@@ -26,7 +26,7 @@
         },
         {
             "name": "Docs: sphinx-build (debug)",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "sphinx",
             "args": [
@@ -41,7 +41,7 @@
         },
         {
             "name": "Docs: sphinx-autobuild (debug)",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "sphinx_autobuild",
             "args": [
@@ -51,6 +51,32 @@
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "justMyCode": true
+        },
+        {
+            "name": "Web UI: Uvicorn (FastAPI)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "bjjsim.web.app:create_app",
+                "--factory",
+                "--host",
+                "127.0.0.1",
+                "--port",
+                "8000"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": true
+        },
+        {
+            "name": "Web UI: Quick Serve (PowerShell)",
+            "type": "PowerShell",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "script": "${workspaceFolder}/scripts/serve-quick.ps1",
+            "args": [],
+            "createTemporaryIntegratedConsole": true
         }
     ]
 }

@@ -33,6 +33,8 @@ All request/response bodies must be defined as typed models and versioned.
 - Dashboard: start/stop/reset, seed entry, live metrics, and latest frame preview.
 - Config: view current config; limited safe edits behind a form with server-side validation.
 
+Implementation note: initial UI skeleton will live under `src/bjjsim/web/` with FastAPI app factory and Jinja2 templates.
+
 ## Testability Hooks
 
 - Every interactive control has a `data-testid` attribute (e.g., `data-testid="btn-start"`).

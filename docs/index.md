@@ -44,3 +44,10 @@ planning/decisions/ADR-0002-foundational-choices
 planning/decisions/ADR-0003-web-ui-and-testability
 planning/decisions/ADR-0004-ui-first-and-foundational-choices
 ```
+
+```{toctree}
+:maxdepth: 1
+:caption: API
+
+architecture/ui_architecture
+```

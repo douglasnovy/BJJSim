@@ -23,6 +23,13 @@ Status: Documentation scaffolding and project structure only. No executable code
   - Build: `pwsh -ExecutionPolicy Bypass -File .\scripts\docs-build.ps1`
   - Serve (live): `pwsh -ExecutionPolicy Bypass -File .\scripts\docs-serve.ps1`
 
+## Run the local web UI (prototype)
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File .\scripts\setup.ps1
+pwsh -ExecutionPolicy Bypass -File .\scripts\serve-quick.ps1
+```
+
 ## Repository structure
 
 ```text
@@ -54,7 +61,14 @@ Status: Documentation scaffolding and project structure only. No executable code
 │   ├── setup.ps1
 │   ├── docs-build.ps1
 │   └── docs-serve.ps1
-├── src/ (to be added when implementation starts)
+├── src/
+│   └── bjjsim/
+│       ├── __init__.py
+│       └── web/
+│           ├── __init__.py
+│           ├── app.py
+│           └── templates/
+│               └── index.html
 ├── tests/ (to be added with first code)
 ├── CONTRIBUTING.md
 ├── CODE_OF_CONDUCT.md
@@ -81,6 +95,7 @@ Tooling policies
 
 - Python 3.12, strict type hints (mypy), ruff for linting, black for formatting
 - Pre-commit hooks must pass before merging
+- All logs/output use ASCII only
 
 ## Contributing
 

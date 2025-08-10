@@ -9,6 +9,8 @@ Components
 - Web UI Control Panel: Local FastAPI-served pages to control evaluation episodes and view metrics/frames
 - Instrumentation: Reward component logging and episode stats
 
+Near-term implementation: FastAPI UI skeleton in `src/bjjsim/web/` exposing typed endpoints and a simple dashboard.
+
 Key design choices
 
 - Rigid-body physics with small, simple lateral friction by default (no-gi mats approximation)
