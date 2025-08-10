@@ -37,6 +37,15 @@ class StateResponse(BaseModel):
     metrics: dict[str, float] = Field(default_factory=dict)
 
 
+class HealthResponse(BaseModel):
+    status: str
+    version: str
+
+
+class ReadinessResponse(BaseModel):
+    ready: bool
+
+
 @dataclass
 class _ServerState:
     episode_running: bool = False
@@ -122,6 +131,18 @@ def create_app() -> FastAPI:
         )
         await ws.close()
 
+    def healthz() -> JSONResponse:
+        # Import locally to avoid any possibility of import cycles during app startup.
+        from bjjsim import __version__ as pkg_version
+
+        payload = HealthResponse(status="ok", version=pkg_version).model_dump()
+        return JSONResponse(payload)
+
+    def readyz() -> JSONResponse:
+        # Basic readiness: templates directory exists and is accessible.
+        is_ready = TEMPLATES_DIR.exists()
+        return JSONResponse(ReadinessResponse(ready=is_ready).model_dump())
+
     # Mount static if needed later
     app.mount("/static", StaticFiles(directory=str(TEMPLATES_DIR)), name="static")
 
@@ -134,5 +155,7 @@ def create_app() -> FastAPI:
     app.add_api_route("/api/sim/state", get_state, methods=["GET"])
     app.add_api_route("/api/frames/current", get_frame, methods=["GET"], response_class=Response)
     app.add_api_websocket_route("/ws/events", ws_events)
+    app.add_api_route("/healthz", healthz, methods=["GET"])
+    app.add_api_route("/readyz", readyz, methods=["GET"])
 
     return app
