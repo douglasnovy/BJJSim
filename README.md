@@ -42,6 +42,8 @@ Once started, the app provides these initial endpoints:
 - `GET /api/sim/state` — current state
 - `GET /api/frames/current` — placeholder PNG frame (will show live frames in Phase 1)
 - `WS  /ws/events` — WebSocket skeleton for live telemetry
+- `GET /healthz` — health probe with version
+- `GET /readyz` — readiness probe
 
 ## Repository structure
 

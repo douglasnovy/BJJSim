@@ -83,3 +83,20 @@ def test_step_endpoint_advances_when_running() -> None:
     res = client.post("/api/sim/step", json={"num_steps": 2})
     state = res.json()
     assert state["step"] == 7
+
+
+def test_health_and_ready_endpoints() -> None:
+    app = create_app()
+    client = TestClient(app)
+
+    res = client.get("/healthz")
+    assert res.status_code == 200
+    payload: dict[str, Any] = res.json()
+    assert payload["status"] == "ok"
+    assert isinstance(payload["version"], str)
+    assert len(payload["version"]) > 0
+
+    res = client.get("/readyz")
+    assert res.status_code == 200
+    payload2: dict[str, Any] = res.json()
+    assert "ready" in payload2
