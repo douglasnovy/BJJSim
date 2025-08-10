@@ -54,6 +54,12 @@
         <div>Episode running: <span id="val-running">{{ 'yes' if episode_running else 'no' }}</span></div>
         <div>Last seed: <span id="val-seed">{{ last_seed if last_seed is not none else '-' }}</span></div>
         <div>Step: <span id="val-step">{{ step }}</span></div>
+        <div style="margin-top:0.5rem;">
+            <strong>Server metrics</strong>
+            <div>Episodes started: <span id="val-m-episodes">0</span></div>
+            <div>Total steps: <span id="val-m-steps">0</span></div>
+            <div>Steps/sec (EMA): <span id="val-m-sps">0.0</span></div>
+        </div>
     </div>
     <div class="preview" style="margin-top:1rem;">
         <div>Frame preview:</div>
@@ -111,6 +117,20 @@
             }
         }
         startPreviewLoop();
+
+        // Poll metrics periodically
+        setInterval(async () => {
+            try {
+                const res = await fetch('/api/metrics');
+                if (!res.ok) return;
+                const m = await res.json();
+                document.getElementById('val-m-episodes').textContent = m.episodes_started.toFixed(0);
+                document.getElementById('val-m-steps').textContent = m.total_steps.toFixed(0);
+                document.getElementById('val-m-sps').textContent = m.steps_per_second.toFixed(2);
+            } catch (_) {
+                // ignore
+            }
+        }, 500);
     </script>
 </body>
 
