@@ -6,6 +6,7 @@ Components
 - Environment Adapter (Gymnasium): Multi-agent API, observation/action spaces, reward/termination
 - Training Orchestrator (RLlib): PPO configuration, self-play setup, checkpointing, evaluation
 - Visualization: Optional GUI toggle, optional video capture and on-screen annotations
+- Web UI Control Panel: Local FastAPI-served pages to control evaluation episodes and view metrics/frames
 - Instrumentation: Reward component logging and episode stats
 
 Key design choices
@@ -14,6 +15,7 @@ Key design choices
 - Hierarchical rewards to impart priorities without hand-coding moves
 - Deterministic stepping (fixed dt) and bounded action magnitudes
 - Adapter layer boundaries so we can change physics engine or RL library later
+- Local web UI instead of desktop GUI to enable robust, automated UI testing in Python
 
 Data flow
 

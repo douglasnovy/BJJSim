@@ -13,7 +13,8 @@ Phase 1 — Physics Prototype
 Phase 2 — Environment and Rewards
 
 - Multi-agent Gymnasium env; observation/action spaces; hierarchical reward components with logging
-- Exit: Random-policy rollouts run; reward components tracked
+- Web UI control panel (local) with start/stop/reset/seed; periodic frame preview; Playwright test scaffolding
+- Exit: Random-policy rollouts run; reward components tracked; UI smoke test passes headless
 
 Phase 3 — Self-Play Baseline
 

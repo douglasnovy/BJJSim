@@ -7,6 +7,14 @@ Environment
 - gui: bool (default: false)
 - seed: int
 
+Web UI
+
+- web_enabled: bool (default: false)
+- web_host: str (default: "127.0.0.1")
+- web_port: int (default: 8000)
+- web_base_url: str (default: "/")
+- cors_origins: list[str] (default: [])
+
 Physics
 
 - friction_lateral: float (default: 0.05)

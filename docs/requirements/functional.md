@@ -24,3 +24,9 @@
 5. Instrumentation
     - Log episode stats and reward components separately
     - Deterministic mode for reproducibility (fixed seeds, fixed dt)
+
+6. Web UI (Local Control Panel)
+   - Serve a local web dashboard to control evaluation episodes (start/stop/reset) and set seeds
+   - Display live metrics (reward components, contact counts) and a periodic frame preview with overlays
+   - Provide REST and WebSocket APIs as described in `architecture/ui_architecture.md`
+   - All interactive elements include `data-testid` attributes and accessible roles/names

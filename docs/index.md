@@ -11,6 +11,7 @@ Welcome to the BJJSim documentation. Start with the overview and navigate throug
 requirements/overview
 requirements/functional
 requirements/nonfunctional
+requirements/ui_testability
 requirements/assumptions
 requirements/open_questions
 requirements/glossary
@@ -28,6 +29,7 @@ architecture/physics_design
 architecture/reward_design
 architecture/self_play
 architecture/configuration
+architecture/ui_architecture
 ```
 
 ```{toctree}
@@ -39,4 +41,5 @@ planning/milestones
 planning/risks
 planning/decisions/ADR-0001-initial-architecture
 planning/decisions/ADR-0002-foundational-choices
+planning/decisions/ADR-0003-web-ui-and-testability
 ```
