@@ -100,3 +100,37 @@ def test_health_and_ready_endpoints() -> None:
     assert res.status_code == 200
     payload2: dict[str, Any] = res.json()
     assert "ready" in payload2
+
+
+def test_config_get_and_update() -> None:
+    app = create_app()
+    client = TestClient(app)
+
+    # Default config
+    res = client.get("/api/config")
+    assert res.status_code == 200
+    cfg: dict[str, Any] = res.json()
+    assert isinstance(cfg["preview_hz"], int)
+    assert cfg["preview_hz"] >= 1
+    assert isinstance(cfg["max_steps_per_episode"], int)
+
+    # Update config
+    res = client.post("/api/config", json={"preview_hz": 5, "max_steps_per_episode": 3})
+    assert res.status_code == 200
+    cfg2: dict[str, Any] = res.json()
+    assert cfg2["preview_hz"] == 5
+    assert cfg2["max_steps_per_episode"] == 3
+
+    # Respect max_steps_per_episode by auto-stopping
+    res = client.post("/api/sim/start", json={})
+    assert res.status_code == 200
+    res = client.post("/api/sim/step", json={"num_steps": 2})
+    assert res.status_code == 200
+    state: dict[str, Any] = res.json()
+    assert state["episode_running"] is True
+    assert state["step"] == 2
+    # Next step should stop at or beyond limit
+    res = client.post("/api/sim/step", json={"num_steps": 1})
+    state2: dict[str, Any] = res.json()
+    assert state2["step"] >= 3
+    assert state2["episode_running"] is False

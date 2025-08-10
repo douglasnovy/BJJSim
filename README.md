@@ -45,6 +45,13 @@ Once started, the app provides these initial endpoints:
 - `GET /healthz` — health probe with version
 - `GET /readyz` — readiness probe
 
+### Troubleshooting
+
+- No module named `uvicorn`:
+  - Ensure the virtual environment is active: `.\n+.venv\Scripts\Activate.ps1`
+  - Install the project and deps: `pip install -e .`
+  - Or re-run setup: `pwsh -ExecutionPolicy Bypass -File .\scripts\setup.ps1`
+
 ## Repository structure
 
 ```text
