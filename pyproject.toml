@@ -43,7 +43,7 @@ select = [
     "ANN", # flake8-annotations
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = ["ANN"]
 
 [tool.mypy]
