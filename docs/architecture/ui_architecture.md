@@ -26,7 +26,7 @@ All request/response bodies must be defined as typed models and versioned.
 
 - UI-first: wire the UI to the physics adapter with simple scripted motions before RL is integrated.
 - Determinism hooks: explicit `{seed:int}` and `reset` ensure reproducible e2e tests.
-- Frame cadence: 2–5 Hz preview to bound CPU; on-demand still image endpoint for tests.
+- Frame cadence: 2–5 Hz preview to bound CPU; on-demand still image endpoint for tests. A placeholder PNG is returned until physics rendering lands.
 
 ## Pages (initial)
 

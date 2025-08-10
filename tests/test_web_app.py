@@ -37,3 +37,26 @@ def test_reset_and_state_roundtrip() -> None:
     assert res.status_code == 200
     state = res.json()
     assert state["episode_running"] is False
+
+
+def test_frame_endpoint_png() -> None:
+    app = create_app()
+    client = TestClient(app)
+
+    res = client.get("/api/frames/current")
+    assert res.status_code == 200
+    assert res.headers.get("content-type") == "image/png"
+    body = res.content
+    # PNG signature
+    assert body.startswith(b"\x89PNG\r\n\x1a\n")
+
+
+def test_ws_events_skeleton() -> None:
+    app = create_app()
+    client = TestClient(app)
+
+    with client.websocket_connect("/ws/events") as ws:
+        data = ws.receive_json()
+        assert data.get("type") == "hello"
+        assert "episode_running" in data
+        assert "step" in data

@@ -5,10 +5,11 @@ from pathlib import Path
 from typing import Final
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from starlette.templating import Jinja2Templates
+from starlette.websockets import WebSocket
 
 
 class ResetRequest(BaseModel):
@@ -77,8 +78,32 @@ def create_app() -> FastAPI:
         return JSONResponse(StateResponse.model_validate(state.__dict__).model_dump())
 
     # Placeholder frame endpoint: returns 204 for now.
-    def get_frame() -> JSONResponse:
-        return JSONResponse({"detail": "no frame available"}, status_code=204)
+    def get_frame() -> Response:
+        """
+        Return a tiny placeholder PNG to enable UI smoke tests.
+
+        The image is a 1x1 opaque black PNG. Replaced with real frames in Phase 1.
+        """
+        png_bytes = (
+            b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde"
+            b"\x00\x00\x00\x0cIDAT\x08\xd7c\xf8\xff\xff?\x00\x05\xfe\x02\xfeA\x8d\x1d\x89\x00\x00\x00\x00IEND\xaeB`\x82"
+        )
+        return Response(content=png_bytes, media_type="image/png")
+
+    async def ws_events(ws: WebSocket) -> None:
+        """Minimal WebSocket endpoint for future live telemetry.
+
+        For now, accepts the connection and sends a single hello event.
+        """
+        await ws.accept()
+        await ws.send_json(
+            {
+                "type": "hello",
+                "episode_running": state.episode_running,
+                "step": state.step,
+            }
+        )
+        await ws.close()
 
     # Mount static if needed later
     app.mount("/static", StaticFiles(directory=str(TEMPLATES_DIR)), name="static")
@@ -89,6 +114,7 @@ def create_app() -> FastAPI:
     app.add_api_route("/api/sim/start", start, methods=["POST"])
     app.add_api_route("/api/sim/stop", stop, methods=["POST"])
     app.add_api_route("/api/sim/state", get_state, methods=["GET"])
-    app.add_api_route("/api/frames/current", get_frame, methods=["GET"])
+    app.add_api_route("/api/frames/current", get_frame, methods=["GET"], response_class=Response)
+    app.add_api_websocket_route("/ws/events", ws_events)
 
     return app

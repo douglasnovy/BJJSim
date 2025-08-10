@@ -27,6 +27,10 @@
       <div>Last seed: <span id="val-seed">{{ last_seed if last_seed is not none else '-' }}</span></div>
       <div>Step: <span id="val-step">{{ step }}</span></div>
     </div>
+    <div class="preview" style="margin-top:1rem;">
+      <div>Frame preview:</div>
+      <img id="img-frame" alt="frame" src="/api/frames/current" width="200" height="200" style="border:1px solid #ddd;" data-testid="img-frame" />
+    </div>
     <script>
       async function post(path, body) {
         const res = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
@@ -53,6 +57,12 @@
       document.getElementById('btn-stop').addEventListener('click', async () => {
         render(await post('/api/sim/stop', {}));
       });
+      // Refresh the frame preview periodically (2 Hz)
+      setInterval(() => {
+        const img = document.getElementById('img-frame');
+        const url = '/api/frames/current?ts=' + Date.now();
+        img.src = url;
+      }, 500);
     </script>
   </body>
   </html>
