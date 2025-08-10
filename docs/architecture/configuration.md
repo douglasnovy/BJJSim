@@ -1,4 +1,4 @@
-# Configuration Knobs
+# Configuration Knobs and Strategy
 
 Environment
 
@@ -7,11 +7,20 @@ Environment
 - gui: bool (default: false)
 - seed: int
 
+Web UI
+
+- web_enabled: bool (default: false)
+- web_host: str (default: "127.0.0.1")
+- web_port: int (default: 8000)
+- web_base_url: str (default: "/")
+- cors_origins: list[str] (default: [])
+
 Physics
 
-- friction_lateral: float (default: 0.0)
+- friction_lateral: float (default: 0.05)
 - friction_spinning: float (default: 0.0)
 - friction_rolling: float (default: 0.0)
+- torque_control: bool (default: true)
 - torque_scale: float (default: 200.0)
 - init_pose_jitter: float (default: 0.02)
 
@@ -37,6 +46,12 @@ Self-play / Training
 - entropy_coeff: float (default: 0.0)
 - seed: int
 
+Observation/Contacts
+
+- contact_K: int (default: 8)
+- contact_decay_window: int (default: 3)
+- include_opponent_yaw: bool (default: false)
+
 Notes
 
-- Capture these in a typed config (e.g., Pydantic model) when implementation begins.
+- Implementation will use Pydantic v2 typed models as the source of truth, with layered overrides (defaults → YAML → env vars). Effective config for each run will be frozen to `runs/<run>/config.yaml`.

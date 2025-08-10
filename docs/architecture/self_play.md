@@ -11,6 +11,11 @@ Opponent sampling
 - Start with symmetric latest policies
 - Optionally introduce past checkpoint sampling later to stabilize learning
 
+Visualization & logging
+
+- Enable periodic GUI evaluation episodes with on-screen annotations of reward events
+- Log per-component rewards and contact stats; emit CSV/Parquet for offline review
+
 Key hyperparameters (initial)
 
 - Clip param, entropy coeff, learning rate, vf clip, GAE λ

@@ -27,6 +27,12 @@ Thumbs.db
 ray_results/
 logs/
 docs/_build/
+runs/
+playwright-report/
+test-results/
+test-results*.zip
+blob-report/
+trace.zip
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

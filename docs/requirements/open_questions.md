@@ -1,12 +1,12 @@
 # Open Questions / TBD
 
-- Humanoid model: Which URDF and joint mapping will we standardize on? Link IDs for neck/arms?
-- Reward thresholds: Exact z-height delta for "top", number of contacts for "control", force thresholds for chokes
-- Hyperextension detection: Joint-specific safe limits vs. generic margins; per-joint weighting
-- Termination: Timeout length, tap-out criteria, stability checks to avoid false positives
-- Observation: Contact encoding limit and decay window; include opponent base orientation?
-- Action space: Torque vs. position control; action scaling and clipping
-- Curriculum: When to introduce friction or constraints; randomization ranges for initial poses
-- Self-play strategy: Exact PPO settings; opponent sampling (latest vs. past checkpoints)
-- Determinism: What elements remain nondeterministic and how do we bound them?
-- Licensing: Project license selection (MIT/BSD/Apache-2.0?)
+- Humanoid model: Select a standard, well-supported model and document joint/link mapping (neck/arms). Candidate: DeepMind Control Suite Humanoid (MJCF) port for PyBullet.
+- Reward thresholds: Confirm initial defaults for top/control/choke; validate via visualization.
+- Hyperextension detection: Prefer joint-specific safe limits derived from model; define per-joint margins.
+- Termination: Timeout length and robust tap-out detection; stability checks to avoid false positives.
+- Observation: Fix contact K=8 and decay window D=3 initially; revisit after profiling. Opponent yaw excluded initially.
+- Action space: Default to torque control; define scaling/clipping per joint; keep position control as future option.
+- Curriculum: Start with small non-zero lateral friction and allow annealing schedule; define pose randomization ranges.
+- Self-play strategy: Start with latest-vs-latest; add historical checkpoint sampling later as needed.
+- Determinism: Enumerate remaining nondeterministic sources and log seeds/configs.
+- Licensing: Adopt PolyForm Noncommercial 1.0.0 to allow contributions while disallowing commercial use.
