@@ -5,6 +5,14 @@ Welcome to the BJJSim documentation. Start with the overview and navigate throug
 ## Contents
 
 ```{toctree}
+:maxdepth: 1
+:caption: Overview
+
+README
+planning_review
+```
+
+```{toctree}
 :maxdepth: 2
 :caption: Requirements
 

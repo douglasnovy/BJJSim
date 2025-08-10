@@ -42,7 +42,6 @@ def create_app() -> FastAPI:
     templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
     state = _ServerState()
 
-    @app.get("/", response_class=HTMLResponse)  # type: ignore[misc]
     def index(request: Request) -> HTMLResponse:
         return templates.TemplateResponse(
             "index.html",
@@ -54,7 +53,6 @@ def create_app() -> FastAPI:
             },
         )
 
-    @app.post("/api/sim/reset")  # type: ignore[misc]
     def reset(req: ResetRequest) -> JSONResponse:
         state.episode_running = False
         state.step = 0
@@ -62,7 +60,6 @@ def create_app() -> FastAPI:
             state.last_seed = req.seed
         return JSONResponse(StateResponse.model_validate(state.__dict__).model_dump())
 
-    @app.post("/api/sim/start")  # type: ignore[misc]
     def start(req: StartRequest) -> JSONResponse:
         if state.episode_running:
             raise HTTPException(status_code=409, detail="episode already running")
@@ -72,21 +69,26 @@ def create_app() -> FastAPI:
         state.step = 0
         return JSONResponse(StateResponse.model_validate(state.__dict__).model_dump())
 
-    @app.post("/api/sim/stop")  # type: ignore[misc]
     def stop() -> JSONResponse:
         state.episode_running = False
         return JSONResponse(StateResponse.model_validate(state.__dict__).model_dump())
 
-    @app.get("/api/sim/state")  # type: ignore[misc]
     def get_state() -> JSONResponse:
         return JSONResponse(StateResponse.model_validate(state.__dict__).model_dump())
 
     # Placeholder frame endpoint: returns 204 for now.
-    @app.get("/api/frames/current")  # type: ignore[misc]
     def get_frame() -> JSONResponse:
         return JSONResponse({"detail": "no frame available"}, status_code=204)
 
     # Mount static if needed later
     app.mount("/static", StaticFiles(directory=str(TEMPLATES_DIR)), name="static")
+
+    # Register routes explicitly to keep mypy happy with decorators
+    app.add_api_route("/", index, methods=["GET"], response_class=HTMLResponse)
+    app.add_api_route("/api/sim/reset", reset, methods=["POST"])
+    app.add_api_route("/api/sim/start", start, methods=["POST"])
+    app.add_api_route("/api/sim/stop", stop, methods=["POST"])
+    app.add_api_route("/api/sim/state", get_state, methods=["GET"])
+    app.add_api_route("/api/frames/current", get_frame, methods=["GET"])
 
     return app

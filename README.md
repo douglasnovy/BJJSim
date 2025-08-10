@@ -2,7 +2,7 @@
 
 Brazilian Jiu-Jitsu multi-agent self-play simulation. This repository will host a Python 3.12, type-hinted, research-grade environment to explore emergent BJJ-like behaviors via simplified rigid-body physics and reinforcement learning self-play.
 
-Status: Documentation scaffolding and project structure only. No executable code yet.
+Status: UI skeleton implemented with FastAPI; basic endpoints and unit tests passing. Documentation scaffolded and building clean.
 
 ## What we're building
 
@@ -29,6 +29,14 @@ Status: Documentation scaffolding and project structure only. No executable code
 pwsh -ExecutionPolicy Bypass -File .\scripts\setup.ps1
 pwsh -ExecutionPolicy Bypass -File .\scripts\serve-quick.ps1
 ```
+
+Once started, the app provides these initial endpoints:
+
+- `GET /` — dashboard page
+- `POST /api/sim/reset` — reset with optional `{seed:int}`
+- `POST /api/sim/start` — start episode
+- `POST /api/sim/stop` — stop episode
+- `GET /api/sim/state` — current state
 
 ## Repository structure
 
@@ -69,7 +77,8 @@ pwsh -ExecutionPolicy Bypass -File .\scripts\serve-quick.ps1
 │           ├── app.py
 │           └── templates/
 │               └── index.html
-├── tests/ (to be added with first code)
+├── tests/
+│   └── test_web_app.py
 ├── CONTRIBUTING.md
 ├── CODE_OF_CONDUCT.md
 ├── pyproject.toml
@@ -89,11 +98,11 @@ pwsh -ExecutionPolicy Bypass -File .\scripts\serve-quick.ps1
 pwsh -ExecutionPolicy Bypass -File .\scripts\setup.ps1
 ```
 
-This will create a virtual environment, install dev tooling (ruff/black/mypy/pre-commit/pytest), and install pre-commit hooks.
+This will create a virtual environment, install dev tooling (ruff/mypy/pytest/pre-commit), and install pre-commit hooks.
 
 Tooling policies
 
-- Python 3.12, strict type hints (mypy), ruff for linting, black for formatting
+- Python 3.12, strict type hints (mypy), ruff for linting/formatting
 - Pre-commit hooks must pass before merging
 - All logs/output use ASCII only
 
