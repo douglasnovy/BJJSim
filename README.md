@@ -27,7 +27,7 @@ Status: Documentation scaffolding and project structure only. No executable code
 
 ```powershell
 pwsh -ExecutionPolicy Bypass -File .\scripts\setup.ps1
-uvicorn bjjsim.web.app:create_app --factory --host 127.0.0.1 --port 8000
+pwsh -ExecutionPolicy Bypass -File .\scripts\serve-quick.ps1
 ```
 
 ## Repository structure
