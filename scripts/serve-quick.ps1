@@ -20,11 +20,14 @@ function Test-PortFree {
     }
 }
 
-if (-not (Test-Path .venv)) {
-    Write-Host "Virtual env not found. Run scripts/setup.ps1 first." -ForegroundColor Yellow
+$venvActivate = Join-Path -Path ".venv" -ChildPath "Scripts/Activate.ps1"
+if (Test-Path $venvActivate) {
+    Write-Host "Activating virtual environment" -ForegroundColor Cyan
+    & $venvActivate
 }
-
-& .\.venv\Scripts\Activate.ps1
+else {
+    Write-Host "No virtualenv detected; proceeding with system Python PATH" -ForegroundColor Yellow
+}
 
 while (-not (Test-PortFree -H $BindHost -P $Port)) {
     $Port++

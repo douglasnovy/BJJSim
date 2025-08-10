@@ -21,6 +21,7 @@
       <button class="btn" id="btn-reset" data-testid="btn-reset">Reset</button>
       <button class="btn" id="btn-start" data-testid="btn-start">Start</button>
       <button class="btn" id="btn-stop" data-testid="btn-stop" {% if not episode_running %}disabled{% endif %} data-testid="btn-stop">Stop</button>
+      <button class="btn" id="btn-step" data-testid="btn-step">Step +1</button>
     </div>
     <div class="metrics" aria-live="polite">
       <div>Episode running: <span id="val-running">{{ 'yes' if episode_running else 'no' }}</span></div>
@@ -47,6 +48,7 @@
         document.getElementById('val-seed').textContent = state.last_seed ?? '-';
         document.getElementById('val-step').textContent = state.step;
         document.getElementById('btn-stop').disabled = !state.episode_running;
+        document.getElementById('btn-step').disabled = !state.episode_running;
       }
       document.getElementById('btn-reset').addEventListener('click', async () => {
         render(await post('/api/sim/reset', { seed: getSeed() }));
@@ -56,6 +58,9 @@
       });
       document.getElementById('btn-stop').addEventListener('click', async () => {
         render(await post('/api/sim/stop', {}));
+      });
+      document.getElementById('btn-step').addEventListener('click', async () => {
+        render(await post('/api/sim/step', { num_steps: 1 }));
       });
       // Refresh the frame preview periodically (2 Hz)
       setInterval(() => {

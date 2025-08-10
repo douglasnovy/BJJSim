@@ -16,6 +16,7 @@
 - `POST /api/sim/reset` → reset environment with optional `{seed:int}`.
 - `POST /api/sim/start` → start a seeded evaluation episode.
 - `POST /api/sim/stop` → stop current episode.
+- `POST /api/sim/step` → advance the simulation by `{num_steps:int>=1}` while running (deterministic scaffold).
 - `GET  /api/sim/state` → JSON snapshot of high-level state/metrics.
 - `GET  /api/frames/current` → latest rendered frame (JPEG/PNG) with overlays when enabled.
 - `WS   /ws/events` → stream of telemetry/events (reward components, contact counts, termination reasons).

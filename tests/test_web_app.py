@@ -60,3 +60,26 @@ def test_ws_events_skeleton() -> None:
         assert data.get("type") == "hello"
         assert "episode_running" in data
         assert "step" in data
+
+
+def test_step_endpoint_advances_when_running() -> None:
+    app = create_app()
+    client = TestClient(app)
+
+    # Not running -> 409 on step
+    res = client.post("/api/sim/step", json={"num_steps": 3})
+    assert res.status_code == 409
+
+    # Start then step
+    res = client.post("/api/sim/start", json={})
+    assert res.status_code == 200
+    res = client.post("/api/sim/step", json={"num_steps": 5})
+    assert res.status_code == 200
+    state: dict[str, Any] = res.json()
+    assert state["episode_running"] is True
+    assert state["step"] == 5
+
+    # Another step
+    res = client.post("/api/sim/step", json={"num_steps": 2})
+    state = res.json()
+    assert state["step"] == 7
