@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+import asyncio
+from collections import deque
+from dataclasses import dataclass, field
 from pathlib import Path
 from time import monotonic
 from typing import Final
@@ -10,7 +12,7 @@ from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
-from starlette.websockets import WebSocket
+from starlette.websockets import WebSocket, WebSocketDisconnect
 
 
 class ResetRequest(BaseModel):
@@ -53,6 +55,21 @@ class MetricsResponse(BaseModel):
     steps_per_second: float
 
 
+class Event(BaseModel):
+    """Lightweight server event for UI and debugging.
+
+    Payload is a small, typed dictionary. Avoids nested structures for now.
+    """
+
+    type: str
+    ts: float
+    payload: dict[str, float | int | bool | str]
+
+
+class EventsResponse(BaseModel):
+    events: list[Event]
+
+
 @dataclass
 class _ServerState:
     episode_running: bool = False
@@ -63,6 +80,8 @@ class _ServerState:
     episodes_started_count: int = 0
     last_step_monotonic: float | None = None
     steps_ema_sps: float = 0.0
+    # In-memory event log (ring buffer)
+    event_log: deque[Event] = field(default_factory=lambda: deque(maxlen=500))
 
 
 TEMPLATES_DIR: Final[Path] = Path(__file__).parent / "templates"
@@ -135,6 +154,10 @@ def create_app() -> FastAPI:
         state.steps_ema_sps = (1 - alpha) * state.steps_ema_sps + alpha * instantaneous_sps
         state.last_step_monotonic = now
 
+    def _log_event(event_type: str, payload: dict[str, float | int | bool | str]) -> None:
+        evt = Event(type=event_type, ts=monotonic(), payload=payload)
+        state.event_log.append(evt)
+
     def reset(req: ResetRequest) -> StateResponse:
         state.episode_running = False
         state.step = 0
@@ -143,6 +166,7 @@ def create_app() -> FastAPI:
         # Reset per-episode timing; leave global counters intact
         state.last_step_monotonic = None
         state.steps_ema_sps = 0.0
+        _log_event("reset", {"seed": float(req.seed) if req.seed is not None else -1.0})
         return _to_state_response()
 
     def start(req: StartRequest) -> StateResponse:
@@ -155,10 +179,15 @@ def create_app() -> FastAPI:
         state.episodes_started_count += 1
         state.last_step_monotonic = None
         state.steps_ema_sps = 0.0
+        _log_event(
+            "start",
+            {"seed": float(state.last_seed) if state.last_seed is not None else -1.0},
+        )
         return _to_state_response()
 
     def stop() -> StateResponse:
         state.episode_running = False
+        _log_event("stop", {"reason": 1.0})  # 1.0 means manual stop (placeholder)
         return _to_state_response()
 
     def get_state() -> StateResponse:
@@ -178,6 +207,8 @@ def create_app() -> FastAPI:
         if state.step >= config.max_steps_per_episode:
             # Auto-stop when reaching max steps per episode
             state.episode_running = False
+            _log_event("stop", {"reason": 2.0})  # 2.0 means auto stop at limit
+        _log_event("step", {"num_steps": float(req.num_steps), "step": float(state.step)})
         return _to_state_response()
 
     # Placeholder frame endpoint: returns 204 for now.
@@ -196,9 +227,11 @@ def create_app() -> FastAPI:
     async def ws_events(ws: WebSocket) -> None:
         """Minimal WebSocket endpoint for future live telemetry.
 
-        For now, accepts the connection and sends a single hello event.
+        Accepts the connection, sends a hello, then streams periodic state updates
+        until the client disconnects.
         """
         await ws.accept()
+        # First message: hello
         await ws.send_json(
             {
                 "type": "hello",
@@ -206,7 +239,27 @@ def create_app() -> FastAPI:
                 "step": state.step,
             }
         )
-        await ws.close()
+        # Periodic state messages
+        try:
+            while True:
+                msg = {
+                    "type": "state",
+                    "episode_running": state.episode_running,
+                    "step": state.step,
+                    "metrics": _build_metrics(),
+                }
+                await ws.send_json(msg)
+                # Default 500 ms, overridable via query param (bounded 10..2000 ms)
+                raw_interval = ws.query_params.get("interval_ms") if ws.scope else None
+                try:
+                    interval_ms = int(raw_interval) if raw_interval is not None else 500
+                except Exception:
+                    interval_ms = 500
+                interval_ms = max(10, min(2000, interval_ms))
+                await asyncio.sleep(interval_ms / 1000.0)
+        except WebSocketDisconnect:
+            # Client closed the connection; exit gracefully.
+            return
 
     def healthz() -> HealthResponse:
         # Import locally to avoid any possibility of import cycles during app startup.
@@ -229,6 +282,12 @@ def create_app() -> FastAPI:
         if req.max_steps_per_episode is not None:
             config.max_steps_per_episode = req.max_steps_per_episode
         return config
+
+    def get_events(limit: int = 100) -> EventsResponse:
+        # Return the most recent events up to limit (default 100)
+        lim = max(1, min(500, limit))
+        items = list(state.event_log)[-lim:]
+        return EventsResponse(events=items)
 
     # Config page
     def config_page(request: Request) -> HTMLResponse:
@@ -257,6 +316,7 @@ def create_app() -> FastAPI:
     app.add_api_route("/readyz", readyz, methods=["GET"], response_model=ReadinessResponse)
     app.add_api_route("/api/config", get_config, methods=["GET"], response_model=AppConfig)
     app.add_api_route("/api/config", update_config, methods=["POST"], response_model=AppConfig)
+    app.add_api_route("/api/events", get_events, methods=["GET"], response_model=EventsResponse)
     app.add_api_route("/config", config_page, methods=["GET"], response_class=HTMLResponse)
 
     return app

@@ -12,15 +12,15 @@ Updates in this iteration
 
 Suggested next tasks
 
-- Promote metrics to a dedicated `/api/metrics` endpoint and render a small metrics widget on `index.html`.
-- Introduce a simple in-memory event log and expand WS to stream periodic state updates.
 - Start stubbing a physics adapter interface with types and unit tests.
 
 Completed in this iteration
 
 - Added `GET /api/metrics` returning `{ episodes_started, total_steps, steps_per_second }`.
 - Updated `index.html` to poll and display server metrics.
-- Added unit test `test_metrics_endpoint` and updated Web API docs.
+- Expanded WebSocket `/ws/events` to stream periodic `state` messages after an initial `hello`.
+- Introduced in-memory event log with `GET /api/events` and corresponding tests.
+- Added unit tests for WS streaming and events endpoint.
 
 Notes on tooling
 

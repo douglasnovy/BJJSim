@@ -22,4 +22,5 @@ GET  /healthz         -> { status: "ok", version: string }
 GET  /readyz          -> { ready: boolean }
 GET  /api/config      -> { preview_hz: int, max_steps_per_episode: int }
 POST /api/config      { preview_hz?: int, max_steps_per_episode?: int } -> updated config
+GET  /api/events      -> { events: [ { type: string, ts: float, payload: object } ] }
 ```

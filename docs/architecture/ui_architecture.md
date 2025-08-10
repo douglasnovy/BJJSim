@@ -19,7 +19,7 @@
 - `POST /api/sim/step` → advance the simulation by `{num_steps:int>=1}` while running (deterministic scaffold).
 - `GET  /api/sim/state` → JSON snapshot of high-level state/metrics.
 - `GET  /api/frames/current` → latest rendered frame (JPEG/PNG) with overlays when enabled.
-- `WS   /ws/events` → stream of telemetry/events (reward components, contact counts, termination reasons).
+- `WS   /ws/events` → streams periodic `state` messages after an initial `hello`. Future: telemetry/events (reward components, contact counts, termination reasons).
 
 All request/response bodies must be defined as typed models and versioned.
 
