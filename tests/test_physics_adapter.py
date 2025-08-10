@@ -29,5 +29,3 @@ def test_deterministic_counter_adapter_basic() -> None:
     adapter.stop()
     adapter.step(10)
     assert adapter.step_count == 5
-
-

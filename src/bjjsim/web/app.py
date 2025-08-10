@@ -7,12 +7,11 @@ from pathlib import Path
 from time import monotonic
 from typing import Final
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
-from starlette.websockets import WebSocket, WebSocketDisconnect
 
 from bjjsim.physics import DeterministicCounterAdapter, PhysicsAdapter
 
