@@ -61,6 +61,11 @@ pretty = true
 exclude = ["^venv/", "^.venv/", "^tests/"]
 ignore_missing_imports = true
 
+# Ensure tests are ignored even when mypy is invoked with explicit file paths (e.g., pre-commit --all-files)
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+ignore_errors = true
+
 [tool.pytest.ini_options]
 minversion = "7.0"
 addopts = "-q"
