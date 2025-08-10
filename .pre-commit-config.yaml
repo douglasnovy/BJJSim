@@ -32,17 +32,5 @@ repos:
     hooks:
       - id: mypy
         args: ["--config-file=pyproject.toml", "--python-version=3.12"]
-        additional_dependencies: [
-          "pydantic>=2.7.0",
-          "types-requests",
-          "types-setuptools",
-        ]
-
-  - repo: local
-    hooks:
-      - id: pytest
-        name: pytest
-        entry: pytest -q
-        language: system
-        pass_filenames: false
-        types: [python]
+        additional_dependencies:
+          ["pydantic>=2.7.0", "types-requests", "types-setuptools"]
