@@ -1,6 +1,6 @@
 Param(
     [int]$Port = 8000,
-    [string]$Host = "127.0.0.1",
+    [string]$BindHost = "127.0.0.1",
     [int]$MaxTries = 15,
     [int]$DelayMs = 250
 )
@@ -14,7 +14,8 @@ function Test-PortFree {
         $client.Connect($H, $P)
         $client.Close()
         return $false
-    } catch {
+    }
+    catch {
         return $true
     }
 }
@@ -25,22 +26,23 @@ if (-not (Test-Path .venv)) {
 
 & .\.venv\Scripts\Activate.ps1
 
-while (-not (Test-PortFree -H $Host -P $Port)) {
+while (-not (Test-PortFree -H $BindHost -P $Port)) {
     $Port++
     if ($Port -gt 65500) { throw "No free port found" }
 }
 
-Write-Host "Starting server on http://$Host:$Port" -ForegroundColor Cyan
+Write-Host "Starting server on http://${BindHost}:${Port}" -ForegroundColor Cyan
 
 $env:UVICORN_WORKERS = "1"
-$p = Start-Process -FilePath python -ArgumentList "-m","uvicorn","bjjsim.web.app:create_app","--factory","--host",$Host,"--port",$Port -PassThru -NoNewWindow
+$p = Start-Process -FilePath python -ArgumentList "-m", "uvicorn", "bjjsim.web.app:create_app", "--factory", "--host", $BindHost, "--port", $Port -PassThru -NoNewWindow
 
 $ok = $false
-for ($i=0; $i -lt $MaxTries; $i++) {
+for ($i = 0; $i -lt $MaxTries; $i++) {
     try {
-        $r = Invoke-WebRequest -Uri "http://$Host:$Port/api/sim/state" -UseBasicParsing -TimeoutSec 2
+        $r = Invoke-WebRequest -Uri "http://${BindHost}:${Port}/api/sim/state" -UseBasicParsing -TimeoutSec 2
         if ($r.StatusCode -eq 200) { $ok = $true; break }
-    } catch { }
+    }
+    catch { }
     Start-Sleep -Milliseconds $DelayMs
 }
 
@@ -49,8 +51,8 @@ if (-not $ok) {
     throw "Server did not become ready in time"
 }
 
-Write-Host "Server ready: http://$Host:$Port" -ForegroundColor Green
+Write-Host "Server ready: http://${BindHost}:${Port}" -ForegroundColor Green
 Write-Host "Press Ctrl+C in this window to stop."
 
-Start-Process "http://$Host:$Port/"
+Start-Process "http://${BindHost}:${Port}/"
 Wait-Process -Id $p.Id
