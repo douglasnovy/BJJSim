@@ -32,6 +32,7 @@
         "ruff.lint.args": [],
         "ruff.format.enable": true,
         "files.exclude": {
+            "**/.venv": false,
             "**/__pycache__/": true,
             "**/.pytest_cache/": true,
             "**/.ruff_cache/": true,
@@ -40,6 +41,7 @@
             "**/dist/": true
         },
         "search.exclude": {
+            "**/.venv": false,
             "**/__pycache__/": true,
             "**/.pytest_cache/": true,
             "**/.ruff_cache/": true,

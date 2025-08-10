@@ -12,7 +12,7 @@ Updates in this iteration
 
 Suggested next tasks
 
-- Start stubbing a physics adapter interface with types and unit tests.
+- Start stubbing a physics adapter interface with types and unit tests. (Completed in this iteration.)
 
 Completed in this iteration
 
@@ -21,6 +21,8 @@ Completed in this iteration
 - Expanded WebSocket `/ws/events` to stream periodic `state` messages after an initial `hello`.
 - Introduced in-memory event log with `GET /api/events` and corresponding tests.
 - Added unit tests for WS streaming and events endpoint.
+- Implemented `PhysicsAdapter` protocol and `DeterministicCounterAdapter` with unit tests.
+- Integrated adapter into `create_app()` so stepping routes go through the adapter; maintained current behavior.
 
 Notes on tooling
 
