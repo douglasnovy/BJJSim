@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import sys
 from typing import Any
 
-import pytest
 from fastapi.testclient import TestClient
 
 from bjjsim.web.app import create_app
@@ -47,16 +45,13 @@ def test_frame_endpoint_png() -> None:
 
     res = client.get("/api/frames/current")
     assert res.status_code == 200
-    ctype = res.headers.get("content-type", "")
-    assert ctype.startswith("image/png")
+    assert res.headers.get("content-type") == "image/png"
     body = res.content
     # PNG signature
     assert body.startswith(b"\x89PNG\r\n\x1a\n")
 
 
 def test_ws_events_skeleton() -> None:
-    if sys.platform.startswith("win"):
-        pytest.skip("WS test flaky on Windows runners")
     app = create_app()
     client = TestClient(app)
 
