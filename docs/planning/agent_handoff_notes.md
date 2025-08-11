@@ -45,4 +45,4 @@ Ruff migration notes
 
 References
 
-- Ruff migration guidance: https://docs.astral.sh/ruff/editors/migration/
+- Ruff migration guidance: <https://docs.astral.sh/ruff/editors/migration/>
