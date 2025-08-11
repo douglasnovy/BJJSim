@@ -10,7 +10,6 @@ from typing import Final
 import httpx
 import pytest
 
-
 BASE_HOST: Final[str] = "127.0.0.1"
 BASE_PORT: Final[int] = 8765
 BASE_URL: Final[str] = f"http://{BASE_HOST}:{BASE_PORT}"
@@ -29,7 +28,7 @@ def _wait_for_server(url: str, timeout_s: float = 10.0) -> None:
     raise RuntimeError("Server did not become ready in time")
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="session")  # type: ignore[misc]
 def server_url() -> Iterator[str]:
     env = os.environ.copy()
     env["UVICORN_WORKERS"] = "1"
@@ -62,5 +61,3 @@ def server_url() -> Iterator[str]:
                 proc.kill()
         except Exception:
             pass
-
-

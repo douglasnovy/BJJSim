@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 import os
-from typing import Any
 
 import pytest
 
 pytest.importorskip("playwright.sync_api", reason="Playwright not installed")
-from playwright.sync_api import Page, sync_playwright  # type: ignore  # noqa: E402
+from playwright.sync_api import Page, sync_playwright  # noqa: E402
 
 
 def test_dashboard_smoke(server_url: str) -> None:
@@ -37,5 +36,3 @@ def test_dashboard_smoke(server_url: str) -> None:
         assert step_text.isdigit()
 
         browser.close()
-
-
