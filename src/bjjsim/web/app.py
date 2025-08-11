@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 from collections import deque
 from dataclasses import dataclass, field
+from io import BytesIO
 from pathlib import Path
 from time import monotonic
 from typing import Final
@@ -11,6 +12,7 @@ from fastapi import FastAPI, HTTPException, Request, WebSocket, WebSocketDisconn
 from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from PIL import Image, ImageDraw, ImageFont
 from pydantic import BaseModel, Field
 
 from bjjsim.physics import DeterministicCounterAdapter, PhysicsAdapter
@@ -218,17 +220,34 @@ def create_app() -> FastAPI:
         _log_event("step", {"num_steps": float(req.num_steps), "step": float(state.step)})
         return _to_state_response()
 
-    # Placeholder frame endpoint: returns 204 for now.
     def get_frame() -> Response:
         """
-        Return a tiny placeholder PNG to enable UI smoke tests.
+        Return a small PNG preview image that encodes the current step.
 
-        The image is a 1x1 opaque black PNG. Replaced with real frames in Phase 1.
+        The pixel at (0, 0) encodes the current step in its red channel as
+        ``red = step % 256`` to enable lightweight, deterministic tests.
+        A text overlay ("step: N") is also drawn for human inspection.
         """
-        png_bytes = (
-            b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde"
-            b"\x00\x00\x00\x0cIDAT\x08\xd7c\xf8\xff\xff?\x00\x05\xfe\x02\xfeA\x8d\x1d\x89\x00\x00\x00\x00IEND\xaeB`\x82"
-        )
+        # Image size chosen to match the UI preview box nicely.
+        width, height = 200, 200
+        img = Image.new("RGB", (width, height), color=(255, 255, 255))
+        draw = ImageDraw.Draw(img)
+
+        # Encode step in a single pixel for tests to assert without OCR.
+        encoded_red = int(state.step % 256)
+        img.putpixel((0, 0), (encoded_red, 0, 0))
+
+        # Draw a simple text overlay. Use default font to avoid system dependencies.
+        text = f"step: {state.step}"
+        try:
+            font = ImageFont.load_default()
+        except Exception:
+            font = None
+        draw.text((10, 10), text, fill=(0, 0, 0), font=font)
+
+        buf = BytesIO()
+        img.save(buf, format="PNG")
+        png_bytes = buf.getvalue()
         return Response(content=png_bytes, media_type="image/png")
 
     async def ws_events(ws: WebSocket) -> None:

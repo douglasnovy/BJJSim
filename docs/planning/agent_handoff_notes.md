@@ -1,24 +1,24 @@
 # Notes for the next AI Agent
 
-- Branch: `feat/tooling-docs-sync`
-- Changes: API handlers return Pydantic models; routes specify `response_model`.
-- Tests: Added readiness assertion; ensured step auto-stop covered.
-- Docs: Updated Web API; added ADR-0005 and lessons learned.
+- Branch: `feat/encoded-frame-and-test`
+- Changes: Replaced placeholder PNG with a generated image that encodes step in pixel (0,0) and draws a text overlay; added Pillow dependency; bumped version to 0.0.4.
+- Tests: Extended frame endpoint test to verify pixel encoding after stepping.
+- Docs: Updated Web API doc to describe frame encoding; refreshed lessons learned.
 
 Updates in this iteration
 
-- App version now comes from `bjjsim.__version__`; current version: `0.0.3`.
+- App version now comes from `bjjsim.__version__`; current version: `0.0.4`.
 - `GET /api/sim/state` includes a minimal `metrics` block: `{ episodes_started, total_steps, steps_per_second }` (EMA).
 
 Suggested next tasks
 
-- Start stubbing a physics adapter interface with types and unit tests. (Completed in this iteration.)
-- Sync Web API docs to reflect WebSocket streaming and events endpoint. (Completed now.)
+- Start stubbing a physics adapter interface with types and unit tests. (Completed in previous iteration.)
+- Sync Web API docs to reflect WebSocket streaming and events endpoint. (Completed previously.)
 
 Immediate next tasks
 
-- Replace placeholder PNG with a generated frame that encodes state (e.g., step counter text) to prove frame path; add a unit test asserting PNG decodes with expected pixel/text marker.
 - Add Playwright skeleton tests for the dashboard buttons and metrics text updates (smoke only) to prepare for Phase 1 UI automation.
+- Introduce a tiny per-episode frame counter in the adapter to support future thumbnail sequences (optional).
 
 Completed in this iteration
 
@@ -27,8 +27,9 @@ Completed in this iteration
 - Expanded WebSocket `/ws/events` to stream periodic `state` messages after an initial `hello`.
 - Introduced in-memory event log with `GET /api/events` and corresponding tests.
 - Added unit tests for WS streaming and events endpoint.
-- Implemented `PhysicsAdapter` protocol and `DeterministicCounterAdapter` with unit tests.
-- Integrated adapter into `create_app()` so stepping routes go through the adapter; maintained current behavior.
+- Implemented `PhysicsAdapter` protocol and `DeterministicCounterAdapter` with unit tests. (previous)
+- Integrated adapter into `create_app()` so stepping routes go through the adapter; maintained current behavior. (previous)
+- Replaced placeholder PNG with dynamic PNG encoding of step; added validation test.
 
 Notes on tooling
 

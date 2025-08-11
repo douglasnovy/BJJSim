@@ -17,6 +17,7 @@ GET  /api/sim/state   -> {
 }
 GET  /api/metrics     -> { episodes_started: float, total_steps: float, steps_per_second: float }
 GET  /api/frames/current -> image/png
+  - Testing hook: pixel (0,0) encodes the current step in its red channel as `step % 256`; a text overlay "step: N" is also drawn.
 WS   /ws/events       -> streams: initial { type: "hello", ... } followed by periodic { type: "state", ... }
 GET  /healthz         -> { status: "ok", version: string }
 GET  /readyz          -> { ready: boolean }
