@@ -17,7 +17,7 @@ GET  /api/sim/state   -> {
 }
 GET  /api/metrics     -> { episodes_started: float, total_steps: float, steps_per_second: float }
 GET  /api/frames/current -> image/png
-WS   /ws/events       -> single hello message then close
+WS   /ws/events       -> streams: initial { type: "hello", ... } followed by periodic { type: "state", ... }
 GET  /healthz         -> { status: "ok", version: string }
 GET  /readyz          -> { ready: boolean }
 GET  /api/config      -> { preview_hz: int, max_steps_per_episode: int }
