@@ -17,8 +17,9 @@ Suggested next tasks
 
 Immediate next tasks
 
-- Add Playwright skeleton tests for the dashboard buttons and metrics text updates (smoke only) to prepare for Phase 1 UI automation.
-- Introduce a tiny per-episode frame counter in the adapter to support future thumbnail sequences (optional).
+- Playwright smoke test added (`tests/test_e2e_smoke.py`) exercising dashboard controls and metrics text.
+- E2E infra added via `pytest-playwright`; browsers installed in CI step. Test skips locally if browsers not installed.
+- Consider introducing a tiny per-episode frame counter in the adapter to support future thumbnail sequences (optional).
 
 Completed in this iteration
 
@@ -50,6 +51,13 @@ Ruff migration notes
   config `.pymarkdown.json` tuned to our existing docs to avoid noisy reflow-only changes.
 - CI/local: Run `pre-commit run --all-files` before committing. If Windows venv lock issues arise, run
   hooks manually and ensure `core.hooksPath` is default.
+
+Playwright notes
+
+- Dependencies added in `pyproject.toml`: `playwright`, `pytest-playwright`.
+- Local setup: after `pip install -e .`, run `python -m playwright install --with-deps chromium`.
+- Test behavior: E2E smoke test uses a subprocess uvicorn server on `127.0.0.1:8765`.
+- Skips when browsers are not installed (set `PLAYWRIGHT_BROWSERS_INSTALLED=1` to override).
 
 References
 

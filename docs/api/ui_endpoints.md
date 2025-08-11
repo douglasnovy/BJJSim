@@ -19,6 +19,11 @@ GET  /api/metrics     -> { episodes_started: float, total_steps: float, steps_pe
 GET  /api/frames/current -> image/png
   - Testing hook: pixel (0,0) encodes the current step in its red channel as `step % 256`; a text overlay "step: N" is also drawn.
 WS   /ws/events       -> streams: initial { type: "hello", ... } followed by periodic { type: "state", ... }
+
+Testing notes
+
+- The frame endpoint encodes the current step into pixel (0,0) red channel and draws a text overlay for human inspection.
+- The Playwright smoke test uses button `data-testid` values to drive the UI: `btn-start`, `btn-stop`, `btn-reset`, `btn-step`.
 GET  /healthz         -> { status: "ok", version: string }
 GET  /readyz          -> { ready: boolean }
 GET  /api/config      -> { preview_hz: int, max_steps_per_episode: int }

@@ -3,3 +3,5 @@ furo==2024.8.6
 myst-parser==3.0.1
 sphinx-autobuild==2024.4.16
 types-docutils==0.20.0.20240310
+playwright>=1.46.0
+pytest-playwright>=0.5.0
