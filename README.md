@@ -53,7 +53,7 @@ Once started, the app provides these initial endpoints:
 ### Troubleshooting
 
 - No module named `uvicorn`:
-  - Ensure the virtual environment is active: `.\n+.venv\Scripts\Activate.ps1`
+  - Ensure the virtual environment is active: `.\.venv\Scripts\Activate.ps1`
   - Install the project and deps: `pip install -e .`
   - Or re-run setup: `pwsh -ExecutionPolicy Bypass -File .\scripts\setup.ps1`
 

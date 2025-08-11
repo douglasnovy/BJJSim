@@ -6,3 +6,4 @@
 - For Windows CI/local, prefer ASCII-only logs to avoid encoding surprises.
 - Exposing a tiny metrics block via existing state endpoints helps catch regressions without adding infra.
 - When adding new endpoints, mirror types in tests; returning a dedicated `MetricsResponse` simplified validation and kept type hints strict.
+- Keep Web API docs synchronized with behavior. Documenting the WebSocket as a stream (hello then periodic state) avoids UI test confusion.
