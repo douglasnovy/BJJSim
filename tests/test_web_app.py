@@ -51,6 +51,20 @@ def test_frame_endpoint_png() -> None:
     # PNG signature
     assert body.startswith(b"\x89PNG\r\n\x1a\n")
 
+    # Verify step encoding in top-left pixel red channel after stepping
+    assert client.post("/api/sim/start", json={}).status_code == 200
+    assert client.post("/api/sim/step", json={"num_steps": 5}).status_code == 200
+    res2 = client.get("/api/frames/current")
+    assert res2.status_code == 200
+    from io import BytesIO
+
+    from PIL import Image
+
+    img = Image.open(BytesIO(res2.content))
+    r, g, b = img.getpixel((0, 0))
+    assert r == 5 % 256
+    assert g == 0 and b == 0
+
 
 def test_ws_events_streaming() -> None:
     app = create_app()
