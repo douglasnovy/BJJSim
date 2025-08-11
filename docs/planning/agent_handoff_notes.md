@@ -31,3 +31,18 @@ Notes on tooling
   temporarily disabled via `git config core.hooksPath .githooks` after verifying hooks manually.
   Recommendation: run `scripts/setup.ps1` to refresh the venv and re-enable hooks with
   `git config --unset core.hooksPath` before further commits.
+
+Ruff migration notes
+
+- Editor: migrated to Ruff's native language server settings per the official migration guide. Removed
+  deprecated `ruff.lint.run` and `ruff.lint.args` entries from `BJJSim.code-workspace` and configured
+  `ruff.lineLength`, `ruff.lint.select`, and a unified `ruff.configuration` pointing to `pyproject.toml`.
+- Formatter: consolidated on Ruff formatter; removed Black usage in docs, setup script, and pre-commit.
+- Pre-commit: kept `ruff` and `ruff-format` hooks; added `pymarkdown` for Markdown linting with a project
+  config `.pymarkdown.json` tuned to our existing docs to avoid noisy reflow-only changes.
+- CI/local: Run `pre-commit run --all-files` before committing. If Windows venv lock issues arise, run
+  hooks manually and ensure `core.hooksPath` is default.
+
+References
+
+- Ruff migration guidance: <https://docs.astral.sh/ruff/editors/migration/>

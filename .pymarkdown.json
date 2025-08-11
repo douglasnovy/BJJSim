@@ -1,0 +1,20 @@
+{
+    "plugins": {
+        "md013": {
+            "line_length": 1000,
+            "code_blocks": false,
+            "tables": false,
+            "headings": false
+        },
+        "md005": {
+            "enabled": false
+        },
+        "md007": {
+            "enabled": false
+        },
+        "md041": {
+            "level": 1,
+            "front_matter_title": ""
+        }
+    }
+}

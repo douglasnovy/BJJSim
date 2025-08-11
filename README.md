@@ -121,7 +121,7 @@ This will create a virtual environment, install dev tooling (ruff/mypy/pytest/pr
 
 Tooling policies
 
-- Python 3.12, strict type hints (mypy), ruff for linting/formatting
+- Python 3.12, strict type hints (mypy), Ruff for linting and formatting
 - Pre-commit hooks must pass before merging
 - All logs/output use ASCII only
 

@@ -25,9 +25,7 @@ package-dir = { "" = "src" }
 where = ["src"]
 exclude = ["tests*"]
 
-[tool.black]
-line-length = 100
-target-version = ["py312"]
+## Black removed in favor of Ruff formatter
 
 [tool.ruff]
 target-version = "py312"
