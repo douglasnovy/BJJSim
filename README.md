@@ -50,6 +50,17 @@ Once started, the app provides these initial endpoints:
 - `POST /api/config` — update runtime config fields
 - `GET /api/events` — recent in-memory server events (for debugging/UI)
 
+## End-to-end tests (Playwright)
+
+- Install project tooling: `pwsh -ExecutionPolicy Bypass -File .\scripts\setup.ps1`
+- Install browsers: `python -m playwright install --with-deps chromium`
+- Run all tests: `pytest -q`
+
+Notes:
+
+- The E2E smoke test launches a local uvicorn subprocess and drives the dashboard.
+- Locally, if browsers are not installed, the E2E test is skipped. In CI, ensure the install step runs.
+
 ### Troubleshooting
 
 - No module named `uvicorn`:
