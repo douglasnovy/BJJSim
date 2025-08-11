@@ -41,5 +41,5 @@ This project will ship with a locally hosted web UI that is fully automatable by
 
 - Python 3.12, typed everywhere.
 - `pytest` + `pytest-playwright` (or `playwright` plugin) for e2e.
-- `ruff`/`black`/`mypy` for code quality; UI test code must pass the same linters.
+- `ruff`/`mypy` for code quality; UI test code must pass the same linters.
 - ASCII-only logs and outputs to simplify CI parsing.

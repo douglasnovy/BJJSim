@@ -7,7 +7,7 @@ Context
 Decision
 
 - Physics: PyBullet (rigid-body), Gymnasium env adapter, RLlib PPO (torch)
-- Tooling: ruff/black/mypy/pre-commit/pytest; Windows PowerShell setup script
+- Tooling: ruff/mypy/pre-commit/pytest; Windows PowerShell setup script
 - Documentation-first: requirements/architecture/planning before code
 
 Consequences

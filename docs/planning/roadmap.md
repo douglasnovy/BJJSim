@@ -2,7 +2,7 @@
 
 Phase 0 — Scaffolding (this PR)
 
-- Repo structure, docs, tooling (ruff/black/mypy/pre-commit)
+- Repo structure, docs, tooling (ruff/mypy/pre-commit)
 
 Phase 1 — UI-First Physics Prototype
 

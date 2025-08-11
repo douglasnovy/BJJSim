@@ -28,9 +28,17 @@
             }
         },
         "ruff.enable": true,
-        "ruff.lint.run": "onSave",
-        "ruff.lint.args": [],
         "ruff.format.enable": true,
+        "ruff.lineLength": 100,
+        "ruff.lint.select": [
+            "E",
+            "F",
+            "I",
+            "UP",
+            "B",
+            "ANN"
+        ],
+        "ruff.configuration": "${workspaceFolder}/pyproject.toml",
         "files.exclude": {
             "**/.venv": false,
             "**/__pycache__/": true,

@@ -16,8 +16,8 @@ Write-Host "Activating virtual environment" -ForegroundColor Cyan
 Write-Host "Upgrading pip" -ForegroundColor Cyan
 python -m pip install --upgrade pip
 
-Write-Host "Installing dev tooling (ruff, black, mypy, pytest, pre-commit)" -ForegroundColor Cyan
-pip install ruff black mypy pytest pre-commit
+Write-Host "Installing dev tooling (ruff, mypy, pytest, pre-commit)" -ForegroundColor Cyan
+pip install ruff mypy pytest pre-commit
 
 Write-Host "Installing pre-commit hooks" -ForegroundColor Cyan
 pre-commit install

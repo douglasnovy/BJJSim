@@ -6,7 +6,7 @@ Thank you for helping build an open, rigorous BJJ self-play simulation.
 
 - Python 3.12 only
 - Type hints required everywhere (public and private). CI enforces `mypy --strict`.
-- Style: `ruff` (lint) and `black` (format). Pre-commit hooks must pass.
+- Style: `ruff` (lint and format). Pre-commit hooks must pass.
 - Tests: `pytest`. Add tests for new behavior. Prefer small, focused tests.
 - Documentation: Update relevant docs under `docs/` with each change.
 
@@ -15,7 +15,7 @@ Thank you for helping build an open, rigorous BJJ self-play simulation.
 1. Create an issue describing the change.
 2. Create a branch: `feature/<short-description>`.
 3. Run `pre-commit install` once, then commit frequently.
-4. Ensure `ruff`, `black`, `mypy`, and `pytest` are green locally.
+4. Ensure `ruff`, `mypy`, and `pytest` are green locally.
 5. Open a PR linking the issue and updating docs.
 
 ## Code organization
