@@ -113,7 +113,7 @@ def create_app() -> FastAPI:
 
     templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
     state = _ServerState()
-    physics: PhysicsAdapter = DeterministicCounterAdapter()
+    physics: PhysicsAdapter = DeterministicCounterAdapter()  # type: ignore[assignment]
     config = AppConfig()
 
     def index(request: Request) -> HTMLResponse:

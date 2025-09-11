@@ -2,9 +2,9 @@
 
 Brazilian Jiu-Jitsu multi-agent self-play simulation. This repository will host a Python 3.12, type-hinted, research-grade environment to explore emergent BJJ-like behaviors via simplified rigid-body physics and reinforcement learning self-play.
 
-Status: UI skeleton implemented with FastAPI; basic endpoints and unit tests passing. Placeholder PNG frame endpoint and WebSocket skeleton added. Documentation scaffolded and building clean.
+Status: **Phase 1 Complete** ✅ - UI-First Physics Prototype delivered. Deterministic stepping validated, web UI functional with full API endpoints, frame preview working, and comprehensive test suite verified.
 
-Current branch target: Phase 1 stepping scaffold — adds typed `POST /api/sim/step` to advance a deterministic counter while an episode is running, plus UI and tests. Also adds lightweight server metrics in `GET /api/sim/state`.
+Next target: Phase 2 — Environment and Rewards - Multi-agent Gymnasium environment with observation/action spaces and hierarchical reward components.
 
 ## What we're building
 
