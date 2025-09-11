@@ -23,12 +23,14 @@ This project enforces strict formatting standards to prevent CI failures:
 ### Editor Configuration
 
 The project includes `.editorconfig` for automatic editor compliance. Most editors will automatically:
+
 - Use LF line endings
 - Insert final newlines
 - Trim trailing whitespace
 - Use correct indentation
 
 **Recommended VS Code settings** (add to your settings.json):
+
 ```json
 {
     "files.eol": "\n",
