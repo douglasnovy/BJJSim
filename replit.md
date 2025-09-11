@@ -1,9 +1,11 @@
 # BJJSim - Brazilian Jiu-Jitsu Simulation
 
 ## Project Overview
+
 BJJSim is a Python FastAPI web application that provides a simulation framework for Brazilian Jiu-Jitsu multi-agent self-play scenarios. The project is currently in the UI skeleton phase with a working web interface and API endpoints.
 
 ## Current Status
+
 - **Phase**: UI skeleton implementation complete
 - **Version**: 0.0.4
 - **Framework**: FastAPI with Uvicorn server
@@ -11,7 +13,8 @@ BJJSim is a Python FastAPI web application that provides a simulation framework 
 - **Physics**: Deterministic counter adapter (placeholder for future PyBullet integration)
 
 ## Project Structure
-```
+
+```text
 ├── src/bjjsim/
 │   ├── web/
 │   │   ├── app.py           # Main FastAPI application
@@ -27,16 +30,18 @@ BJJSim is a Python FastAPI web application that provides a simulation framework 
 ```
 
 ## Replit Configuration
+
 - **Host**: 0.0.0.0 (configured for Replit proxy)
 - **Port**: 5000 (required for Replit)
 - **Workflow**: "BJJSim Web Server" - runs `python main.py`
 - **Deployment**: Configured for autoscale deployment target
 
 ## Available Endpoints
+
 - `GET /` - Main dashboard page
 - `POST /api/sim/reset` - Reset simulation with optional seed
 - `POST /api/sim/start` - Start episode
-- `POST /api/sim/stop` - Stop episode  
+- `POST /api/sim/stop` - Stop episode
 - `POST /api/sim/step` - Advance simulation by steps
 - `GET /api/sim/state` - Current simulation state
 - `GET /api/frames/current` - Current frame (PNG placeholder)
@@ -48,9 +53,11 @@ BJJSim is a Python FastAPI web application that provides a simulation framework 
 - `POST /api/config` - Update configuration
 
 ## Development Setup
+
 The project uses Python 3.12 with strict type checking (mypy) and modern formatting (ruff). All dependencies are managed through pyproject.toml.
 
 ### Key Dependencies
+
 - FastAPI >= 0.111.0 - Web framework
 - Uvicorn >= 0.30.0 - ASGI server
 - Pydantic >= 2.7.0 - Data validation
@@ -59,9 +66,11 @@ The project uses Python 3.12 with strict type checking (mypy) and modern formatt
 - Playwright >= 1.46.0 - E2E testing
 
 ## Testing
+
 The project includes a comprehensive test suite with both API and end-to-end testing:
 
 ### Test Coverage
+
 - **API Tests**: Complete coverage of all FastAPI endpoints (10 tests)
   - Simulation control (reset, start, stop, step)
   - State management and metrics
@@ -76,6 +85,7 @@ The project includes a comprehensive test suite with both API and end-to-end tes
   - Automatically skipped in Replit environment (browsers not available)
 
 ### Running Tests
+
 ```bash
 # Run all tests (E2E test will be skipped locally)
 pytest tests/ -v
@@ -90,6 +100,7 @@ pytest tests/test_physics_adapter.py -v
 **Note**: E2E tests require Playwright browsers and are designed to run in CI environments. In local development (including Replit), these tests are automatically skipped.
 
 ## Recent Changes
+
 - **2025-09-11**: Imported to Replit environment
   - Created main.py entry point configured for Replit (0.0.0.0:5000)
   - Fixed physics adapter protocol compliance issues
@@ -99,7 +110,9 @@ pytest tests/test_physics_adapter.py -v
   - Validated comprehensive test suite (10/11 tests passing, 1 E2E skipped as expected)
 
 ## Future Milestones
+
 The project roadmap includes:
+
 1. PyBullet physics integration
 2. Multi-agent Gymnasium environment
 3. Hierarchical reward system
@@ -107,7 +120,9 @@ The project roadmap includes:
 5. GUI debugging interface
 
 ## Architecture Notes
+
 The application uses a clean architecture with:
+
 - Protocol-based physics adapter interface (future PyBullet support)
 - FastAPI with dependency injection pattern
 - Type-safe Pydantic models for all API contracts

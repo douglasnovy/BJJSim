@@ -5,7 +5,9 @@ Configured for Replit environment.
 """
 
 import os
+
 import uvicorn
+
 from bjjsim.web.app import create_app
 
 if __name__ == "__main__":

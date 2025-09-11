@@ -1,0 +1,114 @@
+Run pre-commit run --all-files --show-diff-on-failure
+[INFO] Initializing environment for https://github.com/pre-commit/pre-commit-hooks.
+Warning:  repo `https://github.com/pre-commit/pre-commit-hooks` uses deprecated stage names (commit, push) which will be removed in a future version.  Hint: often `pre-commit autoupdate --repo https://github.com/pre-commit/pre-commit-hooks` will fix this.  if it does not -- consider reporting an issue to that repo.
+[INFO] Initializing environment for https://github.com/astral-sh/ruff-pre-commit.
+[INFO] Initializing environment for https://github.com/jackdewinter/pymarkdown.
+[INFO] Initializing environment for https://github.com/pre-commit/mirrors-mypy.
+[INFO] Initializing environment for https://github.com/pre-commit/mirrors-mypy:pydantic>=2.7.0,types-requests,types-setuptools.
+[INFO] Installing environment for https://github.com/pre-commit/pre-commit-hooks.
+[INFO] Once installed this environment will be reused.
+[INFO] This may take a few minutes...
+[INFO] Installing environment for https://github.com/astral-sh/ruff-pre-commit.
+[INFO] Once installed this environment will be reused.
+[INFO] This may take a few minutes...
+[INFO] Installing environment for https://github.com/jackdewinter/pymarkdown.
+[INFO] Once installed this environment will be reused.
+[INFO] This may take a few minutes...
+[INFO] Installing environment for https://github.com/pre-commit/mirrors-mypy.
+[INFO] Once installed this environment will be reused.
+[INFO] This may take a few minutes...
+check for added large files..............................................Passed
+check for merge conflicts................................................Passed
+check yaml...............................................................Passed
+check toml...............................................................Passed
+fix end of files.........................................................Failed
+- hook id: end-of-file-fixer
+- exit code: 1
+- files were modified by this hook
+
+Fixing main.py
+Fixing replit.md
+
+trim trailing whitespace.................................................Failed
+- hook id: trailing-whitespace
+- exit code: 1
+- files were modified by this hook
+
+Fixing replit.md
+
+ruff.....................................................................Failed
+- hook id: ruff
+- files were modified by this hook
+
+Found 1 error (1 fixed, 0 remaining).
+
+ruff-format..............................................................Passed
+pymarkdown-lint..........................................................Failed
+- hook id: pymarkdown
+- exit code: 1
+
+replit.md:3:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)
+replit.md:6:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)
+replit.md:7:1: MD032: Lists should be surrounded by blank lines (blanks-around-lists)
+replit.md:13:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)
+replit.md:14:1: MD031: Fenced code blocks should be surrounded by blank lines (blanks-around-fences)
+replit.md:14:1: MD040: Fenced code blocks should have a language specified (fenced-code-language)
+replit.md:29:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)
+replit.md:35:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)
+replit.md:50:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)
+replit.md:53:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)
+replit.md:61:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)
+replit.md:64:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)
+replit.md:78:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)
+replit.md:79:1: MD031: Fenced code blocks should be surrounded by blank lines (blanks-around-fences)
+replit.md:92:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)
+replit.md:101:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)
+replit.md:109:1: MD022: Headings should be surrounded by blank lines. [Expected: 1; Actual: 0; Below] (blanks-around-headings,blanks-around-headers)
+
+mypy.....................................................................Passed
+pre-commit hook(s) made changes.
+If you are seeing this message in CI, reproduce locally with: `pre-commit run --all-files`.
+To run `pre-commit` as part of git workflow, use `pre-commit install`.
+All changes made by hooks:
+diff --git a/main.py b/main.py
+index f565488..c693a35 100644
+--- a/main.py
++++ b/main.py
+@@ -5,7 +5,9 @@ Configured for Replit environment.
+ """
+ 
+ import os
++
+ import uvicorn
++
+ from bjjsim.web.app import create_app
+ 
+ if __name__ == "__main__":
+@@ -18,4 +20,4 @@ if __name__ == "__main__":
+         port=port,
+         log_level="info",
+         access_log=True,
+-    )
+\ No newline at end of file
++    )
+diff --git a/replit.md b/replit.md
+index 94a0d26..f500247 100644
+--- a/replit.md
++++ b/replit.md
+@@ -36,7 +36,7 @@ BJJSim is a Python FastAPI web application that provides a simulation framework
+ - `GET /` - Main dashboard page
+ - `POST /api/sim/reset` - Reset simulation with optional seed
+ - `POST /api/sim/start` - Start episode
+-- `POST /api/sim/stop` - Stop episode  
++- `POST /api/sim/stop` - Stop episode
+ - `POST /api/sim/step` - Advance simulation by steps
+ - `GET /api/sim/state` - Current simulation state
+ - `GET /api/frames/current` - Current frame (PNG placeholder)
+@@ -114,4 +114,4 @@ The application uses a clean architecture with:
+ - Template-based frontend with WebSocket real-time updates
+ - Comprehensive test suite with Playwright E2E tests
+ 
+-The current deterministic counter adapter serves as a placeholder while the actual physics simulation is developed in future phases.
+\ No newline at end of file
++The current deterministic counter adapter serves as a placeholder while the actual physics simulation is developed in future phases.
+Error: Process completed with exit code 1.
