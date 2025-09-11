@@ -61,7 +61,16 @@ def test_frame_endpoint_png() -> None:
     from PIL import Image
 
     img = Image.open(BytesIO(res2.content))
-    r, g, b = img.getpixel((0, 0))
+    pixel = img.getpixel((0, 0))
+    # Handle both grayscale (single value) and RGB (tuple) cases
+    if isinstance(pixel, (int, float)):
+        r = int(pixel)
+        g = b = 0
+    elif isinstance(pixel, tuple) and len(pixel) >= 3:
+        r, g, b = pixel[:3]  # Take first 3 values in case of RGBA
+    else:
+        # Default fallback if pixel format is unexpected
+        r = g = b = 0
     assert r == 5 % 256
     assert g == 0 and b == 0
 

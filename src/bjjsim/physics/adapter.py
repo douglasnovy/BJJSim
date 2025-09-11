@@ -12,25 +12,25 @@ class PhysicsAdapter(Protocol):
     early prototyping, while allowing a future PyBullet-backed implementation.
     """
 
-    def reset(self: Self, seed: int | None) -> None:
+    def reset(self, seed: int | None) -> None:
         """Reset internal state; apply seed if provided."""
 
-    def start(self: Self, seed: int | None) -> None:
+    def start(self, seed: int | None) -> None:
         """Start a new episode; apply seed if provided."""
 
-    def stop(self: Self) -> None:
+    def stop(self) -> None:
         """Stop the current episode if running."""
 
-    def step(self: Self, num_steps: int) -> None:
+    def step(self, num_steps: int) -> None:
         """Advance the simulation deterministically by the given number of steps."""
 
     @property
-    def step_count(self: Self) -> int:
+    def step_count(self) -> int:
         """Total steps advanced in the current episode."""
         ...
 
     @property
-    def last_seed(self: Self) -> int | None:
+    def last_seed(self) -> int | None:
         """The last seed applied via reset/start, if any."""
         ...
 
