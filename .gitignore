@@ -23,6 +23,10 @@ Thumbs.db
 # VS Code: keep workspace configs in repo
 # (We intentionally track .vscode for shared tasks/launch/settings)
 
+# Replit ephemeral files - prevents pre-commit formatting issues
+attached_assets/
+*.log
+
 # Ray/RL
 ray_results/
 logs/
