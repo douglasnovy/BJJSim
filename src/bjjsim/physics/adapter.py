@@ -27,10 +27,12 @@ class PhysicsAdapter(Protocol):
     @property
     def step_count(self: Self) -> int:
         """Total steps advanced in the current episode."""
+        ...
 
     @property
     def last_seed(self: Self) -> int | None:
         """The last seed applied via reset/start, if any."""
+        ...
 
 
 @dataclass
