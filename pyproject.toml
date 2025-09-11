@@ -1,7 +1,7 @@
 [project]
 name = "bjjsim"
-version = "0.0.4"
-description = "Brazilian Jiu-Jitsu multi-agent self-play simulation (UI skeleton)"
+version = "0.1.0"
+description = "Brazilian Jiu-Jitsu multi-agent self-play simulation with Gymnasium environment"
 readme = "README.md"
 requires-python = ">=3.12"
 authors = [{ name = "BJJSim Contributors" }]
