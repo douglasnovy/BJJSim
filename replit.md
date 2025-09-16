@@ -7,7 +7,7 @@ BJJSim is a Python FastAPI web application that provides a simulation framework 
 ## Current Status
 
 - **Phase**: **Phase 2 Complete** ✅ - Environment and Rewards implemented
-- **Version**: 0.1.0  
+- **Version**: 0.1.0
 - **Framework**: FastAPI with Uvicorn server
 - **Frontend**: HTML templates with Jinja2 + real-time WebSocket updates
 - **Environment**: Multi-agent Gymnasium environment with hierarchical rewards

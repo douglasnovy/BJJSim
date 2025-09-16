@@ -5,11 +5,11 @@ Goal: Build a Python-based multi-agent self-play simulation to explore emergent 
 Key components
 
 - Physics: PyBullet with rigid humanoids, fixed time step, small non-zero lateral friction by default (configurable)
-- Environment: Custom multi-agent Gymnasium environment with typed observations/actions
+- Environment: Custom multi-agent environment designed for future Gymnasium compatibility with typed observations/actions
 - Rewards: Hierarchical — staying on top > control > joint hyperextension > choke; energy penalty; terminate on submission
 - RL: Self-play using Ray RLlib (PPO, torch); GUI for debugging; headless training
 
-Near-term deliverable: minimal FastAPI UI skeleton with deterministic test hooks (reset/seed, placeholder state, events) to unblock e2e test scaffolding.
+Near-term deliverable: initial multi-agent environment scaffold with deterministic test hooks (reset/seed, placeholder observations/rewards) to pair with the FastAPI UI and unblock end-to-end experiments.
 
 Scope (initial)
 

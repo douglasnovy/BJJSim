@@ -15,6 +15,7 @@ Deliverable now: UI skeleton with typed endpoints and placeholder data to enable
 
 Phase 2 — Environment and Rewards
 
+- Initial Gymnasium environment scaffold with deterministic placeholder observations/rewards (delivered in this iteration)
 - Multi-agent Gymnasium env; observation/action spaces; hierarchical reward components with logging
 - Web UI control panel (local) with start/stop/reset/seed; periodic frame preview; Playwright test scaffolding
 - Exit: Random-policy rollouts run; reward components tracked; UI smoke test passes headless
