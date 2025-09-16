@@ -11,8 +11,9 @@ if FASTAPI_SPEC is None or PIL_SPEC is None:
     pytest.skip("fastapi/Pillow not installed", allow_module_level=True)
 
 from fastapi.testclient import TestClient  # noqa: E402
-from bjjsim.web.app import create_app  # noqa: E402
 from PIL import Image  # noqa: E402
+
+from bjjsim.web.app import create_app  # noqa: E402
 
 
 def test_reset_and_state_roundtrip() -> None:

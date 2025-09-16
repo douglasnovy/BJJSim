@@ -10,10 +10,7 @@ from bjjsim.physics import DeterministicCounterAdapter
 
 
 def make_zero_actions(env: BJJMultiAgentEnv) -> dict[str, list[float]]:
-    return {
-        agent: [0.0 for _ in range(env.config.action_dim)]
-        for agent in env.agents
-    }
+    return {agent: [0.0 for _ in range(env.config.action_dim)] for agent in env.agents}
 
 
 def l2_norm(values: Sequence[float]) -> float:
@@ -74,7 +71,9 @@ def test_step_advances_physics_and_tracks_rewards() -> None:
     expected_penalty = -env.config.energy_penalty_scale * l2_norm(action_with_energy[env.agents[0]])
     for agent in env.agents:
         assert rewards_energy[agent] == pytest.approx(env.config.step_reward + expected_penalty)
-        assert infos_energy[agent]["reward_components"]["energy_penalty"] == pytest.approx(expected_penalty)
+        assert infos_energy[agent]["reward_components"]["energy_penalty"] == pytest.approx(
+            expected_penalty
+        )
 
     # Continue stepping until we hit the max and trigger truncation.
     _, _, _, truncated_final, _ = env.step(zero_actions)
