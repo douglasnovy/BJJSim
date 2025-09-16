@@ -9,7 +9,7 @@ Components
 - Web UI Control Panel: Local FastAPI-served pages to control evaluation episodes and view metrics/frames
 - Instrumentation: Reward component logging and episode stats
 
-Near-term implementation: FastAPI UI skeleton in `src/bjjsim/web/` exposing typed endpoints and a simple dashboard.
+Near-term implementation: FastAPI UI skeleton in `src/bjjsim/web/` plus an initial Gymnasium environment (`bjjsim.env`) exposing deterministic placeholder observations/rewards for testing.
 
 Key design choices
 

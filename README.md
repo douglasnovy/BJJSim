@@ -2,16 +2,26 @@
 
 Brazilian Jiu-Jitsu multi-agent self-play simulation. This repository will host a Python 3.12, type-hinted, research-grade environment to explore emergent BJJ-like behaviors via simplified rigid-body physics and reinforcement learning self-play.
 
-Status: **Phase 1 Complete** ✅ - UI-First Physics Prototype delivered. Deterministic stepping validated, web UI functional with full API endpoints, frame preview working, and comprehensive test suite verified.
+Status: **Phase 2 In Progress** 🚧 - Phase 1's UI-first physics prototype is complete, and an initial multi-agent environment skeleton now ships with deterministic placeholder observations/rewards for integration testing without external dependencies.
 
-Next target: Phase 2 — Environment and Rewards - Multi-agent Gymnasium environment with observation/action spaces and hierarchical reward components.
+Next focus: Phase 2 — Environment and Rewards - Replace placeholder observations with physics data, add richer reward components, and expose termination signals beyond episode length.
 
 ## What we're building
 
 - Two rigid humanoids in PyBullet interact under simplified physics
-- A custom multi-agent Gymnasium environment (observations/actions/rewards well-defined)
+- A custom multi-agent environment designed to align with Gymnasium semantics once the full dependency stack is available
 - Hierarchical rewards prioritizing: staying on top > control > joint hyperextension > choke
 - Self-play training with RLlib PPO (torch), GUI for debugging and headless for training
+
+## Optional dependencies
+
+The repository vendors only standard-library code to keep tests runnable in constrained environments. Installing the following extras unlocks additional features and tests:
+
+- `fastapi`, `uvicorn`, `pydantic`, `jinja2`, `httpx`, `pillow`: required for the dashboard API and Playwright smoke test
+- `gymnasium`, `numpy`: bring the environment closer to the long-term Gymnasium API plan
+- `playwright`, `pytest-playwright`: enable browser-driven end-to-end tests
+
+When these packages are absent, the related tests are skipped while core physics and environment unit tests continue to run.
 
 ## Documentation (Sphinx)
 
@@ -58,8 +68,8 @@ Once started, the app provides these initial endpoints:
 
 Notes:
 
-- The E2E smoke test launches a local uvicorn subprocess and drives the dashboard.
-- Locally, if browsers are not installed, the E2E test is skipped. In CI, ensure the install step runs.
+- The E2E smoke test launches a local uvicorn subprocess and drives the dashboard when the optional web stack is installed.
+- Locally, if browsers or FastAPI dependencies are not installed, the related tests are skipped. In CI, ensure the install step runs.
 
 ### Troubleshooting
 
@@ -102,12 +112,22 @@ Notes:
 ├── src/
 │   └── bjjsim/
 │       ├── __init__.py
+│       ├── env/
+│       │   └── __init__.py
+│       ├── physics/
+│       │   ├── __init__.py
+│       │   └── adapter.py
 │       └── web/
 │           ├── __init__.py
 │           ├── app.py
 │           └── templates/
 │               └── index.html
 ├── tests/
+│   ├── README.md
+│   ├── conftest.py
+│   ├── test_e2e_smoke.py
+│   ├── test_env.py
+│   ├── test_physics_adapter.py
 │   └── test_web_app.py
 ├── CONTRIBUTING.md
 ├── CODE_OF_CONDUCT.md

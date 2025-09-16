@@ -1,10 +1,18 @@
 from __future__ import annotations
 
+import importlib.util
 from typing import Any
 
-from fastapi.testclient import TestClient
+import pytest
 
-from bjjsim.web.app import create_app
+FASTAPI_SPEC = importlib.util.find_spec("fastapi")
+PIL_SPEC = importlib.util.find_spec("PIL")
+if FASTAPI_SPEC is None or PIL_SPEC is None:
+    pytest.skip("fastapi/Pillow not installed", allow_module_level=True)
+
+from fastapi.testclient import TestClient  # noqa: E402
+from bjjsim.web.app import create_app  # noqa: E402
+from PIL import Image  # noqa: E402
 
 
 def test_reset_and_state_roundtrip() -> None:
@@ -56,9 +64,8 @@ def test_frame_endpoint_png() -> None:
     assert client.post("/api/sim/step", json={"num_steps": 5}).status_code == 200
     res2 = client.get("/api/frames/current")
     assert res2.status_code == 200
-    from io import BytesIO
 
-    from PIL import Image
+    from io import BytesIO
 
     img = Image.open(BytesIO(res2.content))
     pixel = img.getpixel((0, 0))
