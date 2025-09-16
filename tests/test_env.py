@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import math
-from typing import Sequence
+from collections.abc import Sequence
+from typing import Mapping, cast
 
 import pytest
 
@@ -97,8 +98,8 @@ def test_invalid_actions_raise() -> None:
         env.step(missing_agent)
 
     # Non-iterable action values
-    non_iterable = {agent: 1.23 for agent in env.agents}  # type: ignore[assignment]
+    non_iterable_raw: dict[str, object] = {agent: 1.23 for agent in env.agents}
     with pytest.raises(ValueError):
-        env.step(non_iterable)
+        env.step(cast(Mapping[str, Sequence[float]], non_iterable_raw))
 
     env.close()
